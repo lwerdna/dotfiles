@@ -1,0 +1,42 @@
+# LEARN:
+# 1) read this source or
+# 2) "help user" from within gdb
+
+# import memory read/display functions
+source ~/.gdbinit_mem
+
+# small setup for gdb-multiarch
+set arch aarch64
+set endian little
+
+# proceed over BL
+define p
+	until *($pc+4)	
+end
+document p
+proceed over bl (since ni never works for me)
+end
+
+# print machine state
+define state
+	printf "-[STACK]-------------------------------------------------------------------------------\n"
+	dq $sp
+	printf "-[REGS]--------------------------------------------------------------------------------\n"
+	printf " x0=%-16lX  x1=%-16lX  x2=%-16lX  x3=%-16lX\n", $x0, $x1, $x2, $x3
+	printf " x4=%-16lX  x5=%-16lX  x6=%-16lX  x7=%-16lX\n", $x4, $x5, $x6, $x7
+	printf " x8=%-16lX  x9=%-16lX x10=%-16lX x11=%-16lX\n", $x8, $x9, $x10, $x11
+	printf "x12=%-16lX x13=%-16lX x14=%-16lX x15=%-16lX\n", $x12, $x13, $x14, $x15
+	printf "x16=%-16lX x17=%-16lX x18=%-16lX x19=%-16lX\n", $x16, $x17, $x18, $x19
+	printf "x20=%-16lX x21=%-16lX x22=%-16lX x23=%-16lX\n", $x20, $x21, $x22, $x23
+	printf "x24=%-16lX x25=%-16lX x26=%-16lX x27=%-16lX\n", $x24, $x25, $x26, $x27
+	printf "x28=%-16lX  fp=%-16lX  lr=%-16lX  sp=%-16lX\n", $x28, $x29, $x30, $sp
+	printf "-[EXEC]--------------------------------------------------------------------------------\n"
+	x/4i $pc
+end
+document state
+Print print the machine state
+end
+
+define hook-stop
+	state
+end

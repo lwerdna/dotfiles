@@ -1,0 +1,136 @@
+# memory read/display functions
+
+# print 8 hex bytes
+# acts as a widget for hex dump
+define hex_quad
+    if $argc != 1
+        help hex_quad
+    else
+        printf "%02X %02X %02X %02X %02X %02X %02X %02X", \
+           *(unsigned char*)($arg0), *(unsigned char*)($arg0 + 1),     \
+           *(unsigned char*)($arg0 + 2), *(unsigned char*)($arg0 + 3), \
+           *(unsigned char*)($arg0 + 4), *(unsigned char*)($arg0 + 5), \
+           *(unsigned char*)($arg0 + 6), *(unsigned char*)($arg0 + 7)
+    end
+end
+document hex_quad
+Print eight hexadecimal bytes starting at address ADDR.
+Usage: hex_quad ADDR
+end
+
+# print ascii character
+define ascii_char
+    if $argc != 1
+        help ascii_char
+    else
+        # thanks elaine :)
+        set $_c = *(unsigned char *)($arg0)
+        if ($_c < 0x20 || $_c > 0x7E)
+            printf "."
+        else
+            printf "%c", $_c
+        end
+    end
+end
+document ascii_char
+Print ASCII value of byte at address ADDR.
+Print "." if the value is unprintable.
+Usage: ascii_char ADDR
+end
+
+# dump bytes 
+define db
+	set $_addr = $arg0
+	set $_limit = $_addr + 128
+
+	while($_addr < $_limit)
+		echo \033[1m
+	        	printf "0x%016lX: ", $_addr
+	        echo \033[0m
+	        hex_quad $_addr
+		printf " "
+	        hex_quad $_addr+8
+	        printf " "
+	        echo \033[1m
+	        ascii_char $_addr+0x0
+	        ascii_char $_addr+0x1
+	        ascii_char $_addr+0x2
+	        ascii_char $_addr+0x3
+	        ascii_char $_addr+0x4
+	        ascii_char $_addr+0x5
+	        ascii_char $_addr+0x6
+	        ascii_char $_addr+0x7
+	        ascii_char $_addr+0x8
+	        ascii_char $_addr+0x9
+	        ascii_char $_addr+0xA
+	        ascii_char $_addr+0xB
+	        ascii_char $_addr+0xC
+	        ascii_char $_addr+0xD
+	        ascii_char $_addr+0xE
+	        ascii_char $_addr+0xF
+        	echo \033[0m
+	        printf "\n"
+
+		set $_addr = $_addr + 16
+	end
+end
+document db
+Print dump bytes at specified address
+end
+
+# dump words (2-byte types)
+define dw
+	set $_addr = $arg0
+	set $_limit = $_addr + 128
+
+	while($_addr < $_limit)
+		echo \033[1m
+	        	printf "0x%016lX: ", $_addr
+	        echo \033[0m
+	        prshortf "%04X %04X %04X %04X %04X %04X %04X %04X\n", 
+                *(unsigned short *)($_addr+0), *(unsigned short *)($_addr+2), *(unsigned short *)($_addr+4), *(unsigned short *)($_addr+6),
+                *(unsigned short *)($_addr+8), *(unsigned short *)($_addr+10), *(unsigned short *)($_addr+12), *(unsigned short *)($_addr+14)
+
+		set $_addr = $_addr + 16
+	end
+end
+document dw
+Print dump words (2-byte types) at specified address
+end
+
+# double double words (4-byte types)
+define dd
+	set $_addr = $arg0
+	set $_limit = $_addr + 128
+
+	while($_addr < $_limit)
+		echo \033[1m
+	        	printf "0x%016lX: ", $_addr
+	        echo \033[0m
+	        printf "%08X %08X %08X %08X\n", *(unsigned int *)($_addr+0), *(unsigned int *)($_addr+4), *(unsigned int *)($_addr+8), *(unsigned int *)($_addr+12)
+
+		set $_addr = $_addr + 16
+	end
+end
+document dd
+Print dump double words (4-byte types) at specified address
+end
+
+# dump quads (8-byte types)
+define dq
+	set $_addr = $arg0
+	set $_limit = $_addr + 128
+
+	while($_addr < $_limit)
+		echo \033[1m
+	        	printf "0x%016lX: ", $_addr
+	        echo \033[0m
+	        printf "%016lX %016lX %016lX %016lX\n", *(unsigned long *)($_addr+0), *(unsigned long *)($_addr+8), *(unsigned long *)($_addr+16), *(unsigned long *)($_addr+24)
+
+		set $_addr = $_addr + 32
+	end
+end
+document dq
+Print dump quad words (8-byte types) at specified address
+end
+
