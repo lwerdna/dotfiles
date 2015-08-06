@@ -17,20 +17,301 @@ document p
 proceed over bl (since ni never works for me)
 end
 
+# initial machine state picture
+set $_old_x0 = $x0
+set $_old_x1 = $x1
+set $_old_x2 = $x2
+set $_old_x3 = $x3
+set $_old_x4 = $x4
+set $_old_x5 = $x5
+set $_old_x6 = $x6
+set $_old_x7 = $x7
+set $_old_x8 = $x8
+set $_old_x9 = $x9
+set $_old_x10 = $x10
+set $_old_x11 = $x11
+set $_old_x12 = $x12
+set $_old_x13 = $x13
+set $_old_x14 = $x14
+set $_old_x15 = $x15
+set $_old_x16 = $x16
+set $_old_x17 = $x17
+set $_old_x18 = $x18
+set $_old_x19 = $x19
+set $_old_x20 = $x20
+set $_old_x21 = $x21
+set $_old_x22 = $x22
+set $_old_x23 = $x23
+set $_old_x24 = $x24
+set $_old_x25 = $x25
+set $_old_x26 = $x26
+set $_old_x27 = $x27
+set $_old_x28 = $x28
+set $_old_x29 = $x29
+set $_old_x30 = $x30
+set $_old_sp = $sp
+
+define color_cyan
+    echo \033[36m
+end
+
+define color_normal
+    echo \033[0m
+end
+
 # print machine state
 define state
 	printf "-[STACK]-------------------------------------------------------------------------------\n"
 	dq $sp
 	printf "-[REGS]--------------------------------------------------------------------------------\n"
-	printf " x0=%-16lX  x1=%-16lX  x2=%-16lX  x3=%-16lX\n", $x0, $x1, $x2, $x3
-	printf " x4=%-16lX  x5=%-16lX  x6=%-16lX  x7=%-16lX\n", $x4, $x5, $x6, $x7
-	printf " x8=%-16lX  x9=%-16lX x10=%-16lX x11=%-16lX\n", $x8, $x9, $x10, $x11
-	printf "x12=%-16lX x13=%-16lX x14=%-16lX x15=%-16lX\n", $x12, $x13, $x14, $x15
-	printf "x16=%-16lX x17=%-16lX x18=%-16lX x19=%-16lX\n", $x16, $x17, $x18, $x19
-	printf "x20=%-16lX x21=%-16lX x22=%-16lX x23=%-16lX\n", $x20, $x21, $x22, $x23
-	printf "x24=%-16lX x25=%-16lX x26=%-16lX x27=%-16lX\n", $x24, $x25, $x26, $x27
-	printf "x28=%-16lX  fp=%-16lX  lr=%-16lX  sp=%-16lX\n", $x28, $x29, $x30, $sp
+    # generate the below with:
+    # #!/usr/bin/python
+    # for i in range(32):
+    #     space = ' '
+    #     (regTag, regName) = (' %d' % i, '$x%d' % i)
+    #     if i<29: regTag = ' x%d' % i
+    #     if i<10: regTag = '  x%d' % i
+    #     if i==29: regTag = '  fp'
+    #     if i==30: regTag = '  lr'
+    #     if i==31: regTag = '  sp'
+    #     if i==31: regName = '$sp'
+    #     print '    printf "%s="' % regTag 
+    #     print '    if(%s != $_old_%s)' % (regName, regName[1:])
+    #     print '    	color_cyan'
+    #     print '    end'
+    #     newline = ''
+    #     if i and not (i+1)%4:
+    #         newline = '\\n'
+    #     print '    printf "%%016lX%s", %s' % (newline, regName)
+    #     print '    color_normal'
+    printf "  x0="
+    if($x0 != $_old_x0)
+    	color_cyan
+    end
+    printf "%016lX", $x0
+    color_normal
+    printf "  x1="
+    if($x1 != $_old_x1)
+    	color_cyan
+    end
+    printf "%016lX", $x1
+    color_normal
+    printf "  x2="
+    if($x2 != $_old_x2)
+    	color_cyan
+    end
+    printf "%016lX", $x2
+    color_normal
+    printf "  x3="
+    if($x3 != $_old_x3)
+    	color_cyan
+    end
+    printf "%016lX\n", $x3
+    color_normal
+    printf "  x4="
+    if($x4 != $_old_x4)
+    	color_cyan
+    end
+    printf "%016lX", $x4
+    color_normal
+    printf "  x5="
+    if($x5 != $_old_x5)
+    	color_cyan
+    end
+    printf "%016lX", $x5
+    color_normal
+    printf "  x6="
+    if($x6 != $_old_x6)
+    	color_cyan
+    end
+    printf "%016lX", $x6
+    color_normal
+    printf "  x7="
+    if($x7 != $_old_x7)
+    	color_cyan
+    end
+    printf "%016lX\n", $x7
+    color_normal
+    printf "  x8="
+    if($x8 != $_old_x8)
+    	color_cyan
+    end
+    printf "%016lX", $x8
+    color_normal
+    printf "  x9="
+    if($x9 != $_old_x9)
+    	color_cyan
+    end
+    printf "%016lX", $x9
+    color_normal
+    printf " x10="
+    if($x10 != $_old_x10)
+    	color_cyan
+    end
+    printf "%016lX", $x10
+    color_normal
+    printf " x11="
+    if($x11 != $_old_x11)
+    	color_cyan
+    end
+    printf "%016lX\n", $x11
+    color_normal
+    printf " x12="
+    if($x12 != $_old_x12)
+    	color_cyan
+    end
+    printf "%016lX", $x12
+    color_normal
+    printf " x13="
+    if($x13 != $_old_x13)
+    	color_cyan
+    end
+    printf "%016lX", $x13
+    color_normal
+    printf " x14="
+    if($x14 != $_old_x14)
+    	color_cyan
+    end
+    printf "%016lX", $x14
+    color_normal
+    printf " x15="
+    if($x15 != $_old_x15)
+    	color_cyan
+    end
+    printf "%016lX\n", $x15
+    color_normal
+    printf " x16="
+    if($x16 != $_old_x16)
+    	color_cyan
+    end
+    printf "%016lX", $x16
+    color_normal
+    printf " x17="
+    if($x17 != $_old_x17)
+    	color_cyan
+    end
+    printf "%016lX", $x17
+    color_normal
+    printf " x18="
+    if($x18 != $_old_x18)
+    	color_cyan
+    end
+    printf "%016lX", $x18
+    color_normal
+    printf " x19="
+    if($x19 != $_old_x19)
+    	color_cyan
+    end
+    printf "%016lX\n", $x19
+    color_normal
+    printf " x20="
+    if($x20 != $_old_x20)
+    	color_cyan
+    end
+    printf "%016lX", $x20
+    color_normal
+    printf " x21="
+    if($x21 != $_old_x21)
+    	color_cyan
+    end
+    printf "%016lX", $x21
+    color_normal
+    printf " x22="
+    if($x22 != $_old_x22)
+    	color_cyan
+    end
+    printf "%016lX", $x22
+    color_normal
+    printf " x23="
+    if($x23 != $_old_x23)
+    	color_cyan
+    end
+    printf "%016lX\n", $x23
+    color_normal
+    printf " x24="
+    if($x24 != $_old_x24)
+    	color_cyan
+    end
+    printf "%016lX", $x24
+    color_normal
+    printf " x25="
+    if($x25 != $_old_x25)
+    	color_cyan
+    end
+    printf "%016lX", $x25
+    color_normal
+    printf " x26="
+    if($x26 != $_old_x26)
+    	color_cyan
+    end
+    printf "%016lX", $x26
+    color_normal
+    printf " x27="
+    if($x27 != $_old_x27)
+    	color_cyan
+    end
+    printf "%016lX\n", $x27
+    color_normal
+    printf " x28="
+    if($x28 != $_old_x28)
+    	color_cyan
+    end
+    printf "%016lX", $x28
+    color_normal
+    printf "  fp="
+    if($x29 != $_old_x29)
+    	color_cyan
+    end
+    printf "%016lX", $x29
+    color_normal
+    printf "  lr="
+    if($x30 != $_old_x30)
+    	color_cyan
+    end
+    printf "%016lX", $x30
+    color_normal
+    printf "  sp="
+    if($sp != $_old_sp)
+    	color_cyan
+    end
+    printf "%016lX\n", $sp
+    color_normal
+
 	printf "-[EXEC]--------------------------------------------------------------------------------\n"
+    # save state for next register comparison
+    set $_old_x0 = $x0
+    set $_old_x1 = $x1
+    set $_old_x2 = $x2
+    set $_old_x3 = $x3
+    set $_old_x4 = $x4
+    set $_old_x5 = $x5
+    set $_old_x6 = $x6
+    set $_old_x7 = $x7
+    set $_old_x8 = $x8
+    set $_old_x9 = $x9
+    set $_old_x10 = $x10
+    set $_old_x11 = $x11
+    set $_old_x12 = $x12
+    set $_old_x13 = $x13
+    set $_old_x14 = $x14
+    set $_old_x15 = $x15
+    set $_old_x16 = $x16
+    set $_old_x17 = $x17
+    set $_old_x18 = $x18
+    set $_old_x19 = $x19
+    set $_old_x20 = $x20
+    set $_old_x21 = $x21
+    set $_old_x22 = $x22
+    set $_old_x23 = $x23
+    set $_old_x24 = $x24
+    set $_old_x25 = $x25
+    set $_old_x26 = $x26
+    set $_old_x27 = $x27
+    set $_old_x28 = $x28
+    set $_old_x29 = $x29
+    set $_old_x30 = $x30
+    set $_old_sp = $sp
+    # print a little disassembly
 	x/4i $pc
 end
 document state
