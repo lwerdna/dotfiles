@@ -26,13 +26,17 @@ set backspace+=start,eol,indent
 set noswapfile
 
 " other progs
-set tags=./tags;./../tags;./../../tags;./../../../tags;./../../../../tags;./../../../../../tags
+set tags=/usr/src/linux-headers-3.16.0-30-generic/tags,./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../../../../../tags
 
 " appearance
 set statusline=[TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2 
 set noantialias
-set guifont="DejaVu Sans Mono 10"
+" TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
+"set guifont=Lucida\ Console:h14
+set guifont=DejaVu\ Sans\ Mono\ 12
+" TIP `:colorscheme <tab>` to cycle thru defaults`
+colorscheme desert
 
 " file types
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
