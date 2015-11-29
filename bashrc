@@ -83,4 +83,7 @@ function fs_eabi {
 	export CCOMPILER=~/arm-eabi-4.7/bin/arm-eabi-
 }
 
-
+function raspi_eabi {
+    # how? git clone https://github.com/raspberrypi/tools
+    export CCOMPILER=~/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gcc
+}

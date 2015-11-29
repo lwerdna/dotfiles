@@ -26,15 +26,38 @@ set backspace+=start,eol,indent
 set noswapfile
 
 " other progs
-set tags=/usr/src/linux-headers-3.16.0-30-generic/tags,./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../../../../../tags
+set tags=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../../../../../tags
 
 " appearance
 set statusline=[TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2 
 set noantialias
 " TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
-"set guifont=Lucida\ Console:h14
+
+if has("win32")
+"--------
+" windows
+"--------
+else
+if has("unix")
+" linux or mac
+let s:uname = system("uname")
+if s:uname == "Darwin\n"
+"--------
+" mac
+"--------
+set guifont=Lucida\ Console:h14
+else
+"--------
+" linux
+"--------
 set guifont=DejaVu\ Sans\ Mono\ 12
+" note: comma automatically added
+set tags+=/usr/src/linux-headers-3.16.0-30-generic/tags
+endif
+endif
+endif
+
 " TIP `:colorscheme <tab>` to cycle thru defaults`
 colorscheme desert
 
