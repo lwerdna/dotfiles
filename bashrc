@@ -8,6 +8,10 @@ export PATH_ALIB_PY3=${PATH_ALIB}/py3
 # ALIB specific point
 export PYTHONPATH=${PYTHONPATH}:${PATH_ALIB_PY3}
 
+# go stuff
+export GOPATH=${HOME}/go
+export PATH=${PATH}:${HOME}/go/bin
+
 # shellcode compiler
 export SCC=${HOME}/repos/v35/scc/scc
 
@@ -34,10 +38,7 @@ if [[ $platform == 'Darwin' ]]; then
     export ANDROID_HOME=${HOME}/android-sdk-macosx
     alias adb=/usr/local/Cellar/android-platform-tools/22.0.0/bin/adb
     export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
-
-    # llvm
-    export LLVM_PATH=/usr/local/Cellar/llvm/3.6.1
-    export LLVM_PATH_BIN=${LLVM_PATH}/bin
+    export NDK_R10E=${HOME}/android-ndk-r10e
 
 elif [[ $platform == 'FreeBSD' ]]; then
     echo setting FreeBSD-specific stuff...
@@ -54,6 +55,9 @@ fi
 
 # platform-generals that depended on the platform-specifics
 export PATH=${PATH}:${ANDROID_HOME}/tools
+
+# qt
+export PATH=${PATH}:${HOME}/Qt/5.5/clang_64/bin/
 
 # select the NDK from the various
 export NDK=$NDK_R10E
@@ -85,5 +89,9 @@ function fs_eabi {
 
 function raspi_eabi {
     # how? git clone https://github.com/raspberrypi/tools
-    export CCOMPILER=~/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-gcc
+    export CCOMPILER=~/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-
+}
+
+function powerpc_eabi {
+    export CCOMPILER=~/powerpc-eabi-4.3.3/bin/powerpc-eabi-
 }
