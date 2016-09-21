@@ -1,0 +1,184 @@
+# this is a gdb "command file"
+# use this by:
+#   making this ~/.gdbinit
+#   or `source <this>` from gdb (add -v for debugging)
+
+# import memory read/display functions
+source ~/.gdbinit_mem
+
+# initial machine state picture
+# using gdb "convenience variables" to remember registers
+init-if-undefined $state_saved = 0
+define state_snapshot
+	set $_old_rax = $rax
+	set $_old_rbx = $rbx
+	set $_old_rcx = $rcx
+	set $_old_rdx = $rdx
+	set $_old_rsi = $rsi
+	set $_old_rdi = $rdi
+	set $_old_rbp = $rbp
+	set $_old_rsp = $rsp
+	set $_old_r8 = $r8
+	set $_old_r9 = $r9
+	set $_old_r10 = $r10
+	set $_old_r11 = $r11
+	set $_old_r12 = $r12
+	set $_old_r13 = $r13
+	set $_old_r14 = $r14
+	set $_old_r15 = $r15
+	set $_old_rip = $rip
+	set $state_saved = 1
+end
+
+define color_cyan
+    echo \033[36m
+end
+
+define color_normal
+    echo \033[0m
+end
+
+# print machine state
+define state
+	if $state_saved != 1
+		state_snapshot
+	end
+
+	printf "-[STACK]-------------------------------------------------------------------------------\n"
+	dq $sp
+	printf "-[REGS]--------------------------------------------------------------------------------\n"
+    printf " rax="
+    if($rax != $_old_rax)
+    	color_cyan
+    end
+    printf "%016lX", $rax
+    color_normal
+
+    printf "  rbx="
+    if($rbx != $_old_rbx)
+    	color_cyan
+    end
+    printf "%016lX", $rbx
+    color_normal
+
+    printf "  rcx="
+    if($rcx != $_old_rcx)
+    	color_cyan
+    end
+    printf "%016lX", $rcx
+    color_normal
+
+    printf "  rdx="
+    if($rdx != $_old_rdx)
+    	color_cyan
+    end
+    printf "%016lX\n", $rdx
+    color_normal
+
+    printf " rsi="
+    if($rsi != $_old_rsi)
+    	color_cyan
+    end
+    printf "%016lX", $rsi
+    color_normal
+
+    printf "  rdi="
+    if($rdi != $_old_rdi)
+    	color_cyan
+    end
+    printf "%016lX", $rdi
+    color_normal
+
+    printf "  rbp="
+    if($rbp != $_old_rbp)
+    	color_cyan
+    end
+    printf "%016lX", $rbp
+    color_normal
+
+    printf "  rsp="
+    if($rsp != $_old_rsp)
+    	color_cyan
+    end
+    printf "%016lX\n", $rsp
+    color_normal
+
+    printf " r08="
+    if($r8 != $_old_r8)
+    	color_cyan
+    end
+    printf "%016lX", $r8
+    color_normal
+
+    printf "  r09="
+    if($r9 != $_old_r9)
+    	color_cyan
+    end
+    printf "%016lX", $r9
+    color_normal
+
+    printf "  r10="
+    if($r10 != $_old_r10)
+    	color_cyan
+    end
+    printf "%016lX", $r10
+    color_normal
+
+    printf "  r11="
+    if($r11 != $_old_r11)
+    	color_cyan
+    end
+    printf "%016lX\n", $r11
+    color_normal
+
+    printf " r12="
+    if($r12 != $_old_r12)
+    	color_cyan
+    end
+    printf "%016lX", $r12
+    color_normal
+
+    printf "  r13="
+    if($r13 != $_old_r13)
+    	color_cyan
+    end
+    printf "%016lX", $r13
+    color_normal
+
+    printf "  r14="
+    if($r14 != $_old_r14)
+    	color_cyan
+    end
+    printf "%016lX", $r14
+    color_normal
+
+    printf "  r15="
+    if($r15 != $_old_r15)
+    	color_cyan
+    end
+    printf "%016lX\n", $r15
+    color_normal
+
+    printf " rip="
+    if($rip != $_old_rip)
+    	color_cyan
+    end
+    printf "%016lX", $rip
+    color_normal
+
+	printf "\n"
+
+	printf "-[EXEC]--------------------------------------------------------------------------------\n"
+	x/8i $pc
+
+	# remember
+	state_snapshot
+end
+document state
+Print print the machine state
+end
+
+define hook-stop
+	state
+end
+
