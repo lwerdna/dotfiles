@@ -1,7 +1,7 @@
 echo "my bashrc executing..."
 
 # ALIB various points
-export PATH_ALIB=${HOME}/repos/lwerdna/alib
+export PATH_ALIB=${HOME}/repos/lwerdna/autils
 export PATH_ALIB_C=${PATH_ALIB}/c
 export PATH_ALIB_PY=${PATH_ALIB}/py
 export PATH_ALIB_PY3=${PATH_ALIB}/py3
