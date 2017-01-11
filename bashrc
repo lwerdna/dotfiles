@@ -1,12 +1,12 @@
 echo "my bashrc executing..."
 
 # ALIB various points
-export PATH_ALIB=${HOME}/repos/lwerdna/autils
-export PATH_ALIB_C=${PATH_ALIB}/c
-export PATH_ALIB_PY=${PATH_ALIB}/py
-export PATH_ALIB_PY3=${PATH_ALIB}/py3
+export PATH_AUTILS=${HOME}/repos/lwerdna/autils
+export PATH_AUTILS_C=${PATH_AUTILS}/c
+export PATH_AUTILS_PY=${PATH_AUTILS}/py
+export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 # ALIB specific point
-export PYTHONPATH=${PYTHONPATH}:${PATH_ALIB_PY3}
+export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY3}
 
 # go stuff
 export GOPATH=${HOME}/go
@@ -19,6 +19,7 @@ export SCC=${HOME}/repos/v35/scc/scc
 platform=`uname`
 # defaults
 export EDITOR='vim'
+
 # platform-specifics
 if [[ $platform == 'Darwin' ]]; then
     echo setting Darwin-specific stuff...
@@ -26,7 +27,8 @@ if [[ $platform == 'Darwin' ]]; then
     # command-line utils
     alias ls='ls -G'
 
-    export EDITOR='subl -w'
+	# for midnight commander
+	export VIEWER='open'
 
     # languages 
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:${PYTHONPATH}
@@ -47,6 +49,9 @@ elif [[ $platform == 'Linux' ]]; then
 
     alias ls='ls --color=auto'
 
+	# for midnight commander
+	export VIEWER='exo-open'
+
     # android
     export ANDROID_HOME=${HOME}/android-sdk-linux
     export NDK_R10C=${HOME}/android-ndk-r10c/r10c
@@ -57,7 +62,7 @@ fi
 export PATH=${PATH}:${ANDROID_HOME}/tools
 
 # qt
-export PATH=${PATH}:${HOME}/Qt/5.5/clang_64/bin/
+export PATH=${PATH}:${HOME}/Qt5.6.0/5.6/clang_64/bin
 
 # select the NDK from the various
 export NDK=$NDK_R10E
