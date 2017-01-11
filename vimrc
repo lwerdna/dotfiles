@@ -13,16 +13,43 @@ syntax on
 set ignorecase
 set hlsearch
 
+"------------------------------------------------------------------------------
 " spacing and stuff
-set noexpandtab
-set copyindent
-set preserveindent
-set softtabstop=0
-set shiftwidth=4
-set tabstop=4
+"------------------------------------------------------------------------------
+
+" default to tabs, or `export USESPACES=1` in environment to use spaces
+
+function! UseTabs()
+	set noexpandtab
+	set copyindent
+	set preserveindent
+	set softtabstop=0
+	set shiftwidth=4
+	set tabstop=4
+endfunction
+
+function! UseSpaces()
+    set tabstop=4
+    set softtabstop=4
+    set shiftwidth=4
+    set expandtab
+endfunction
+
+let usespaces=$USESPACES
+
+if usespaces == '1'
+call UseSpaces()
+else
+call UseTabs()
+endif
+
+"------------------------------------------------------------------------------
+" spacing and stuff
+"------------------------------------------------------------------------------
+
 
 " misc
-set nowrap
+"set nowrap
 set backspace+=start,eol,indent
 set noswapfile
 
