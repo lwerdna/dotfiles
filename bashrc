@@ -15,6 +15,9 @@ export PATH=${PATH}:${HOME}/go/bin
 # shellcode compiler
 export SCC=${HOME}/repos/v35/scc/scc
 
+# binary ninja
+export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/v35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
+
 # per-platform settings
 platform=`uname`
 # defaults
@@ -27,18 +30,21 @@ if [[ $platform == 'Darwin' ]]; then
     # command-line utils
     alias ls='ls -G'
 
+	# apps
+	alias macdown='open -a MacDown'
+
 	# for midnight commander
 	export VIEWER='open'
 
     # languages 
     export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:${PYTHONPATH}
-    export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
+    export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
+    #export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
     alias antlr4='java -jar /usr/local/lib/antlr-4.5.1-complete.jar'
     alias grun='java org.antlr.v4.gui.TestRig'
 
     # android
-    export ANDROID_HOME=${HOME}/android-sdk-macosx
-    alias adb=/usr/local/Cellar/android-platform-tools/22.0.0/bin/adb
+    export ANDROID_HOME=${HOME}/android-sdk
     export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
     export NDK_R10E=${HOME}/android-ndk-r10e
 
@@ -53,13 +59,14 @@ elif [[ $platform == 'Linux' ]]; then
 	export VIEWER='exo-open'
 
     # android
-    export ANDROID_HOME=${HOME}/android-sdk-linux
+    export ANDROID_HOME=${HOME}/android-sdk
     export NDK_R10C=${HOME}/android-ndk-r10c/r10c
     export NDK_R10E=${HOME}/android-ndk-r10e
 fi
 
 # platform-generals that depended on the platform-specifics
 export PATH=${PATH}:${ANDROID_HOME}/tools
+export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 
 # qt
 export PATH=${PATH}:${HOME}/Qt5.6.0/5.6/clang_64/bin
