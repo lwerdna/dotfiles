@@ -44,11 +44,9 @@ call UseTabs()
 endif
 
 "------------------------------------------------------------------------------
-" spacing and stuff
+" misc
 "------------------------------------------------------------------------------
 
-
-" misc
 "set nowrap
 set backspace+=start,eol,indent
 set noswapfile
@@ -61,6 +59,10 @@ set statusline=[TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
 set laststatus=2 
 set noantialias
 " TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
+
+"------------------------------------------------------------------------------
+" OS specific stuff
+"------------------------------------------------------------------------------
 
 if has("win32")
 "--------
@@ -91,6 +93,18 @@ colorscheme desert
 
 " file types
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
+au BufRead,BufNewFile *.spi set filetype=spice
+au BufRead,BufNewFile *.cir set filetype=spice
+au! Syntax spice source ~/.vim/syntax/spice.vim
+
+" regions of highlighting
+" default: /usr/share/vim/vim74/syntax/
+" custom:  ~/.vim/syntax/*.vim
+:syntax include @CPP syntax/cpp.vim
+:syntax region cppSnip matchgroup=Snip start="@begin=cpp@" end="@end=cpp@" contains=@CPP
+:syntax include @PY syntax/python.vim
+:syntax region pySnip matchgroup=Snip start="@begin=py@" end="@end=py@" contains=@PY
+:hi link Snip SpecialComment
 
 " default folding
 set nofoldenable
