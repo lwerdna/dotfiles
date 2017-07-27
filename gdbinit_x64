@@ -3,6 +3,8 @@
 #   making this ~/.gdbinit
 #   or `source <this>` from gdb (add -v for debugging)
 
+set disassembly-flavor intel
+
 # import memory read/display functions
 source ~/.gdbinit_mem
 
