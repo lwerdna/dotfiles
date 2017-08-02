@@ -1,0 +1,185 @@
+# LEARN:
+# 1) read this source or
+# 2) "help user" from within gdb
+
+# import memory read/display functions
+source ~/.gdbinit_mem
+
+# small setup for gdb-multiarch
+set arch arm
+set endian little
+
+# proceed over BL
+define p
+	until *($pc+4)	
+end
+document p
+proceed over bl (since ni never works for me)
+end
+
+# initial machine state picture
+set $_old_r0 = $r0
+set $_old_r1 = $r1
+set $_old_r2 = $r2
+set $_old_r3 = $r3
+set $_old_r4 = $r4
+set $_old_r5 = $r5
+set $_old_r6 = $r6
+set $_old_r7 = $r7
+set $_old_r8 = $r8
+set $_old_r9 = $r9
+set $_old_r10 = $r10
+set $_old_r11 = $r11
+set $_old_r12 = $r12
+set $_old_sp = $sp
+set $_old_lr = $lr
+set $_old_pc = $pc
+set $_old_cpsr = $cpsr
+
+define color_cyan
+    echo \033[36m
+end
+
+define color_normal
+    echo \033[0m
+end
+
+# print machine state
+define state
+	printf "-[STACK]-------------------------------------------------------------------------------\n"
+	dd $sp
+	printf "-[REGS]--------------------------------------------------------------------------------\n"
+    printf "  r0="
+    if($r0 != $_old_r0)
+    	color_cyan
+    end
+    printf "%08lX", $r0
+    color_normal
+    printf "  r1="
+    if($r1 != $_old_r1)
+    	color_cyan
+    end
+    printf "%08lX", $r1
+    color_normal
+    printf "  r2="
+    if($r2 != $_old_r2)
+    	color_cyan
+    end
+    printf "%08lX", $r2
+    color_normal
+    printf "  r3="
+    if($r3 != $_old_r3)
+    	color_cyan
+    end
+    printf "%08lX\n", $r3
+    color_normal
+    printf "  r4="
+    if($r4 != $_old_r4)
+    	color_cyan
+    end
+    printf "%08lX", $r4
+    color_normal
+    printf "  r5="
+    if($r5 != $_old_r5)
+    	color_cyan
+    end
+    printf "%08lX", $r5
+    color_normal
+    printf "  r6="
+    if($r6 != $_old_r6)
+    	color_cyan
+    end
+    printf "%08lX", $r6
+    color_normal
+    printf "  r7="
+    if($r7 != $_old_r7)
+    	color_cyan
+    end
+    printf "%08lX\n", $r7
+    color_normal
+    printf "  r8="
+    if($r8 != $_old_r8)
+    	color_cyan
+    end
+    printf "%08lX", $r8
+    color_normal
+    printf "  r9="
+    if($r9 != $_old_r9)
+    	color_cyan
+    end
+    printf "%08lX", $r9
+    color_normal
+    printf " r10="
+    if($r10 != $_old_r10)
+    	color_cyan
+    end
+    printf "%08lX", $r10
+
+    color_normal
+    printf " r11="
+    if($r11 != $_old_r11)
+    	color_cyan
+    end
+    printf "%08lX\n", $r11
+
+    color_normal
+    printf " r12="
+    if($r12 != $_old_r12)
+    	color_cyan
+    end
+    printf "%08lX", $r12
+
+    color_normal
+    printf "  sp="
+    if($r13 != $_old_sp)
+    	color_cyan
+    end
+    printf "%08lX", $sp
+
+    color_normal
+    printf "  lr="
+    if($r14 != $_old_lr)
+    	color_cyan
+    end
+    printf "%08lX", $lr
+
+    color_normal
+    printf "  pc="
+    if($r15 != $_old_pc)
+    	color_cyan
+    end
+	print "%08lX", $pc
+
+    color_normal
+
+	printf "-[EXEC]--------------------------------------------------------------------------------\n"
+    # save state for next register comparison
+    set $_old_r0 = $r0
+    set $_old_r1 = $r1
+    set $_old_r2 = $r2
+    set $_old_r3 = $r3
+    set $_old_r4 = $r4
+    set $_old_r5 = $r5
+    set $_old_r6 = $r6
+    set $_old_r7 = $r7
+    set $_old_r8 = $r8
+    set $_old_r9 = $r9
+    set $_old_r10 = $r10
+    set $_old_r11 = $r11
+    set $_old_r12 = $r12
+
+    set $_old_sp = $sp
+    set $_old_lr = $lr
+    set $_old_pc = $pc
+    set $_old_cpsr = $cpsr
+
+    # print a little disassembly
+	x/4i $pc
+end
+document state
+Print print the machine state
+end
+
+define hook-stop
+	state
+end
