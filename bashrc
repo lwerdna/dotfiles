@@ -47,6 +47,8 @@ if [[ $platform == 'Darwin' ]]; then
     export ANDROID_HOME=${HOME}/android-sdk
     export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
     export NDK_R10E=${HOME}/android-ndk-r10e
+    export NDK_R15C=${HOME}/android-ndk-r15c
+	alias gdbndk=$NDK/prebuilt/darwin-x86_64/bin/gdb
 
 elif [[ $platform == 'FreeBSD' ]]; then
     echo setting FreeBSD-specific stuff...
@@ -62,6 +64,7 @@ elif [[ $platform == 'Linux' ]]; then
     export ANDROID_HOME=${HOME}/android-sdk
     export NDK_R10C=${HOME}/android-ndk-r10c/r10c
     export NDK_R10E=${HOME}/android-ndk-r10e
+	export NDK=$NDK_R10E
 fi
 
 # platform-generals that depended on the platform-specifics
@@ -70,9 +73,6 @@ export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 
 # qt
 export PATH=${PATH}:${HOME}/Qt5.6.0/5.6/clang_64/bin
-
-# select the NDK from the various
-export NDK=$NDK_R10E
 
 # select cross compiler (setting CCOMPILER) - now you can use ${CCOMPILER}gcc, etc.
 function ndk_arm_eabi {
