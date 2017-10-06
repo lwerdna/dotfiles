@@ -174,7 +174,7 @@ define state
     set $_old_cpsr = $cpsr
 
     # print a little disassembly
-	x/4i $pc
+	x/8i $pc
 end
 document state
 Print print the machine state
