@@ -1,5 +1,8 @@
 echo "my bashrc executing..."
 
+# misc
+export DOTFILES=${HOME}/repos/lwerdna/dotfiles
+
 # ALIB various points
 export PATH_AUTILS=${HOME}/repos/lwerdna/autils
 export PATH_AUTILS_C=${PATH_AUTILS}/c
