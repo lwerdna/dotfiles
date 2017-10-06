@@ -47,7 +47,7 @@ endif
 " misc
 "------------------------------------------------------------------------------
 
-"set nowrap
+set nowrap
 set backspace+=start,eol,indent
 set noswapfile
 
@@ -55,9 +55,17 @@ set noswapfile
 set tags=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../../../../../tags
 
 " appearance
-set statusline=[TYPE=%Y]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+set statusline=%f
+set statusline+=\ 
+set statusline+=[TYPE=%Y]
+set statusline+=\   
+set statusline+=[POS=%04l,%04v]	" current line, virtual col number
+set statusline+=[%p%%]
+set statusline+=\ 
+set statusline+=[LEN=%L]		" total lines
 set laststatus=2 
 set noantialias
+set fillchars+=vert:\ 
 " TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
 
 "------------------------------------------------------------------------------
@@ -95,6 +103,7 @@ colorscheme desert
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufRead,BufNewFile *.spi set filetype=spice
 au BufRead,BufNewFile *.cir set filetype=spice
+au BufRead,BufNewFile *.gplt set filetype=gnuplot
 au! Syntax spice source ~/.vim/syntax/spice.vim
 
 " regions of highlighting
@@ -108,3 +117,34 @@ au! Syntax spice source ~/.vim/syntax/spice.vim
 
 " default folding
 set nofoldenable
+
+"------------------------------------------------------------------------------
+" custom mappings
+"------------------------------------------------------------------------------
+
+" fast edit .vimrc
+:nnoremap <leader>ev :vsplit $MYVIMRC<cr>:echo "editing" $MYVIMRC<cr>
+:nnoremap <leader>sv :source $MYVIMRC<cr>:echo "sourcing" $MYVIMRC<cr>
+
+" move thru visual splits
+:nnoremap <c-h> <c-w>h
+:nnoremap <c-j> <c-w>j
+:nnoremap <c-l> <c-w>l
+:nnoremap <c-k> <c-w>k
+
+" faster escape to normal
+:inoremap jk <esc>
+
+" hand slappers
+:inoremap <esc> <nop>
+
+" uppercase current word
+:nnoremap <c-u> viwU
+
+" quick editors
+source ~/.vim/quickgnuplot.vim
+autocmd BufRead quick.gplt call QuickGnuplotSetup()
+source ~/.vim/quickpy.vim
+autocmd BufRead /tmp/quick.py call QuickPySetup()
+source ~/.vim/quickc.vim
+autocmd BufRead /tmp/quick.c call QuickCSetup()
