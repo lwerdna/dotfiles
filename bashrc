@@ -18,7 +18,10 @@ export SCC=${HOME}/repos/v35/scc/scc
 # binary ninja
 export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/v35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
 
+###############################################################################
 # per-platform settings
+###############################################################################
+
 platform=`uname`
 # defaults
 export EDITOR='vim'
@@ -37,7 +40,7 @@ if [[ $platform == 'Darwin' ]]; then
 	export VIEWER='open'
 
     # languages 
-    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:${PYTHONPATH}
+    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:${PYTHONPATH}:${HOME}/repos/vector35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
     export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
     #export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
     alias antlr4='java -jar /usr/local/lib/antlr-4.5.1-complete.jar'
@@ -48,6 +51,7 @@ if [[ $platform == 'Darwin' ]]; then
     export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
     export NDK_R10E=${HOME}/android-ndk-r10e
     export NDK_R15C=${HOME}/android-ndk-r15c
+	export NDK=$NDK_R15C
 	alias gdbndk=$NDK/prebuilt/darwin-x86_64/bin/gdb
 
 elif [[ $platform == 'FreeBSD' ]]; then
@@ -73,6 +77,10 @@ export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 
 # qt
 export PATH=${PATH}:${HOME}/Qt5.6.0/5.6/clang_64/bin
+
+###############################################################################
+# cross compiler stuff
+###############################################################################
 
 # select cross compiler (setting CCOMPILER) - now you can use ${CCOMPILER}gcc, etc.
 function ndk_arm_eabi {
@@ -107,3 +115,59 @@ function raspi_eabi {
 function powerpc_eabi {
     export CCOMPILER=~/powerpc-eabi-4.3.3/bin/powerpc-eabi-
 }
+
+###############################################################################
+# notes, snippets
+###############################################################################
+notes() {
+	# $1 is positional parameter
+	# $@ is array-like construct of all positional parameters
+	# https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
+	local fpath=$HOME/workspace/notes.md
+	if [ "$1" == "gvim" ]; then
+		gvim + $fpath
+	elif [ "$1" == "vim" ]; then
+		gvim + $fpath
+	elif [ "$1" == "date" ]; then
+		echo '' >> $fpath
+		echo '# '`date +"%m-%d-%Y-%T"` >> $fpath
+		echo '---------------------' >> $fpath
+	elif [ "$1" == "" ]; then
+		less +G $fpath
+	else
+		echo '' >> $fpath
+	    echo $@ >> $fpath
+	fi
+}
+
+snipc() {
+	local fpath=$HOME/workspace/snippets.c
+	if [ "$1" == "vim" ]; then
+		gvim $fpath
+	else
+		less $fpath
+	fi
+}
+
+snippy() {
+	local fpath=$HOME/workspace/snippets.py
+	if [ "$1" == "vim" ]; then
+		gvim $fpath
+	else
+		less $fpath
+	fi
+}
+
+snipmake() {
+	local fpath=$HOME/workspace/snippets.make
+	if [ "$1" == "vim" ]; then
+		gvim -c "set filetype=make" $fpath
+	else
+		less $fpath
+	fi
+}
+
+# quick editor stuff
+alias quickc='gvim /tmp/quick.c'
+alias quickpy='gvim /tmp/quick.py'
+
