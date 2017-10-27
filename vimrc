@@ -148,3 +148,5 @@ source ~/.vim/quickpy.vim
 autocmd BufRead /tmp/quick.py call QuickPySetup()
 source ~/.vim/quickc.vim
 autocmd BufRead /tmp/quick.c call QuickCSetup()
+source ~/.vim/quickpng.vim
+" autocmd BufRead /tmp/quick.png call QuickPngSetup()
