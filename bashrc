@@ -2,6 +2,7 @@ echo "my bashrc executing..."
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
+export WIKIFILES=${HOME}/workspace/wiki/attachments
 
 # ALIB various points
 export PATH_AUTILS=${HOME}/repos/lwerdna/autils
@@ -34,10 +35,11 @@ if [[ $platform == 'Darwin' ]]; then
     echo setting Darwin-specific stuff...
 
     # command-line utils
-    alias ls='ls -G'
+    alias ls='ls -G -t -r'
 
 	# apps
 	alias macdown='open -a MacDown'
+	alias typora='open -a typora'
 
 	# for midnight commander
 	export VIEWER='open'
@@ -143,6 +145,17 @@ notes() {
 	fi
 }
 
+wiki() {
+	local fpath=$HOME/workspace/wiki
+	if [ "$1" == "" ]; then
+		typora $fpath/Wiki.md
+	elif [ "$1" == "files" ]; then
+		open $WIKIFILES
+	else
+		typora $fpath/$1.md
+	fi
+}
+
 snipc() {
 	local fpath=$HOME/workspace/snippets.c
 	if [ "$1" == "vim" ]; then
@@ -162,7 +175,7 @@ snippy() {
 }
 
 snipmake() {
-	local fpath=$HOME/workspace/snippets.make
+	local fpath=$HOME/workspace/Make.md
 	if [ "$1" == "vim" ]; then
 		gvim -c "set filetype=make" $fpath
 	else
