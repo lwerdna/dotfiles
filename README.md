@@ -1,6 +1,6 @@
-The current way I'm using these is to symlink from my home directory into the repos directory. For example, from this dotfiles directory:
-```
-ln -s $DOTFILES/bashrc ~/.bashrc
+The current way I'm using these is to symlink from my home directory into the repos directory.
+
+If there is no .bashrc, I do `ln -s $DOTFILES/bashrc ~/.bashrc` where $DOTFILES is the path to this directory. If .bashrc does exist, I append a `source $DOTFILES/bashrc` to it.
 ```
 
 For gdb, I point the link at whatever architecture I am working on:
@@ -16,6 +16,7 @@ For vim, you might have to create the ~/.vim directory:
 ln -s $DOTFILES/vimrc ~/.vimrc
 ln -s $DOTFILES/quickgnuplot.vim ~/.vim/quickgnuplot.vim
 ln -s $DOTFILES/quickpy.vim ~/.vim/quickpy.vim
+ln -s $DOTFILES/quickpng.vim ~/.vim/quickpng.vim
 ln -s $DOTFILES/quickc.vim ~/.vim/quickc.vim
 ```
 
