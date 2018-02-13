@@ -122,8 +122,10 @@ function powerpc_eabi {
 }
 
 ###############################################################################
-# notes, snippets
+# notes, snippets, wiki
 ###############################################################################
+source ${DOTFILES}/wiki.sh
+
 notes() {
 	# $1 is positional parameter
 	# $@ is array-like construct of all positional parameters
@@ -142,17 +144,6 @@ notes() {
 	else
 		echo '' >> $fpath
 	    echo $@ >> $fpath
-	fi
-}
-
-wiki() {
-	local fpath=$HOME/workspace/wiki
-	if [ "$1" == "" ]; then
-		typora $fpath/Wiki.md
-	elif [ "$1" == "files" ]; then
-		open $WIKIFILES
-	else
-		typora $fpath/$1.md
 	fi
 }
 
@@ -178,6 +169,15 @@ snipmake() {
 	local fpath=$HOME/workspace/Make.md
 	if [ "$1" == "vim" ]; then
 		gvim -c "set filetype=make" $fpath
+	else
+		less $fpath
+	fi
+}
+
+snipbash() {
+	local fpath=$HOME/workspace/snippets.sh
+	if [ "$1" == "vim" ]; then
+		gvim $fpath
 	else
 		less $fpath
 	fi

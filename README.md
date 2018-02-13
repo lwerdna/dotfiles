@@ -1,7 +1,10 @@
 The current way I'm using these is to symlink from my home directory into the repos directory. For example, from this dotfiles directory:
+
 ```
-ln -s $DOTFILES/bashrc ~/.bashrc
+ln -s `pwd`/bashrc ~/.bashrc
 ```
+
+and at the top of .bashrc you should make sure $DOTFILES points to this directory.
 
 For gdb, I point the link at whatever architecture I am working on:
 ```

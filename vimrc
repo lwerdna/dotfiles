@@ -86,7 +86,7 @@ if s:uname == "Darwin\n"
 "--------
 " mac
 "--------
-set guifont=Lucida\ Console:h14
+set guifont=Lucida\ Console:h12
 else
 "--------
 " linux
