@@ -19,6 +19,7 @@ For vim, you might have to create the ~/.vim directory:
 ln -s $DOTFILES/vimrc ~/.vimrc
 ln -s $DOTFILES/quickgnuplot.vim ~/.vim/quickgnuplot.vim
 ln -s $DOTFILES/quickpy.vim ~/.vim/quickpy.vim
+ln -s $DOTFILES/quickpng.vim ~/.vim/quickpng.vim
 ln -s $DOTFILES/quickc.vim ~/.vim/quickc.vim
 ```
 
