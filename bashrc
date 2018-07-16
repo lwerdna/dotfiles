@@ -2,15 +2,12 @@ echo "my bashrc executing..."
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
-export WIKIFILES=${HOME}/workspace/wiki/attachments
 
 # ALIB various points
 export PATH_AUTILS=${HOME}/repos/lwerdna/autils
 export PATH_AUTILS_C=${PATH_AUTILS}/c
 export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
-# ALIB specific point
-export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY3}
 
 # go stuff
 export GOPATH=${HOME}/go
@@ -19,8 +16,21 @@ export PATH=${PATH}:${HOME}/go/bin
 # shellcode compiler
 export SCC=${HOME}/repos/v35/scc/scc
 
-# binary ninja
-export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/v35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
+###############################################################################
+# python
+###############################################################################
+function choose_python2 {
+    export PYTHONPATH=/usr/local/lib/python2.7/site-packages
+    export PYTHONPATH=${PYTHONPATH}:/Library/Python/2.7/site-packages
+    export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/vector35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
+    export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY}
+}
+
+function choose_python3 {
+    export PYTHONPATH=/usr/local/lib/python3.7/site-packages
+    export PYTHONPATH=${PYTHONPATH}:/Library/Python/3.7/site-packages
+    export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY3}
+}
 
 ###############################################################################
 # per-platform settings
@@ -29,6 +39,7 @@ export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/v35/binaryninja/ui/binaryninja.app
 platform=`uname`
 # defaults
 export EDITOR='vim'
+choose_python2
 
 # platform-specifics
 if [[ $platform == 'Darwin' ]]; then
@@ -44,8 +55,7 @@ if [[ $platform == 'Darwin' ]]; then
 	# for midnight commander
 	export VIEWER='open'
 
-    # languages 
-    export PYTHONPATH=$(brew --prefix)/lib/python2.7/site-packages:${PYTHONPATH}:${HOME}/repos/vector35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
+    # java
     export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
     #export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
     alias antlr4='java -jar /usr/local/lib/antlr-4.5.1-complete.jar'
@@ -78,6 +88,7 @@ fi
 
 # platform-generals that depended on the platform-specifics
 export PATH=${PATH}:${ANDROID_HOME}/tools
+export PATH=${PATH}:${ANDROID_HOME}/tools/bin
 export PATH=${PATH}:${ANDROID_HOME}/platform-tools
 
 # qt
@@ -89,9 +100,12 @@ export PATH=${PATH}:${HOME}/Qt5.6.0/5.6/clang_64/bin
 
 # select cross compiler (setting CCOMPILER) - now you can use ${CCOMPILER}gcc, etc.
 function ndk_arm_eabi {
-	# select sysroot (where to find /usr/include, /usr/lib, etc.)
-	export NDK_SYSROOT=$NDK/platforms/android-19/arch-arm
-	export NDK_TOOLCHAIN_PATH=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
+	export NDK_SYSROOT=$NDK/platforms/android-23/arch-arm
+	if [[ $platform == 'Darwin' ]]; then
+		export NDK_TOOLCHAIN_PATH=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin
+	elif [[ $platform == 'Linux' ]]; then
+		export NDK_TOOLCHAIN_PATH=$NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin
+	fi
 	export EABI_STRING=arm-linux-androideabi-
 	export CCOMPILER=$NDK_TOOLCHAIN_PATH/$EABI_STRING
 }
@@ -109,16 +123,23 @@ function fft_eabi {
 }
 
 function fs_eabi {
-	export CCOMPILER=~/arm-eabi-4.7/bin/arm-eabi-
+	export CCOMPILER=$HOME/arm-eabi-4.6/bin/arm-eabi-
+}
+
+function latest_eabi {
+	export CCOMPILER=$HOME/arm-eabi-4.8/bin/arm-eabi-
+	#export CCOMPILER=$HOME/gcc-arm-none-eabi-4_8-2014q3/bin/arm-none-eabi-
+	#export CCOMPILER=$HOME/gcc-arm-none-eabi-6_2-2016q4/bin/arm-none-eabi-
+	#export CCOMPILER=$HOME/gcc-arm-none-eabi-7-2017-q4-major/bin/arm-none-eabi-
 }
 
 function raspi_eabi {
     # how? git clone https://github.com/raspberrypi/tools
-    export CCOMPILER=~/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-
+    export CCOMPILER=$HOME/arm-bcm2708/gcc-linaro-arm-linux-gnueabihf-raspbian/bin/arm-linux-gnueabihf-
 }
 
 function powerpc_eabi {
-    export CCOMPILER=~/powerpc-eabi-4.3.3/bin/powerpc-eabi-
+    export CCOMPILER=$HOME/powerpc-eabi-4.3.3/bin/powerpc-eabi-
 }
 
 ###############################################################################
@@ -130,15 +151,14 @@ notes() {
 	# $1 is positional parameter
 	# $@ is array-like construct of all positional parameters
 	# https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
-	local fpath=$HOME/workspace/notes.md
+	local fpath=$HOME/fdumps/journals/notes.md
 	if [ "$1" == "gvim" ]; then
 		gvim + $fpath
 	elif [ "$1" == "vim" ]; then
 		gvim + $fpath
 	elif [ "$1" == "date" ]; then
 		echo '' >> $fpath
-		echo '# '`date +"%m-%d-%Y-%T"` >> $fpath
-		echo '---------------------' >> $fpath
+		echo '# '`date +"%Y-%m-%d %T"` >> $fpath
 	elif [ "$1" == "" ]; then
 		less +G $fpath
 	else
@@ -148,7 +168,7 @@ notes() {
 }
 
 snipc() {
-	local fpath=$HOME/workspace/snippets.c
+	local fpath=$HOME/fdumps/workspace/snippets.c
 	if [ "$1" == "vim" ]; then
 		gvim $fpath
 	else
@@ -157,7 +177,7 @@ snipc() {
 }
 
 snippy() {
-	local fpath=$HOME/workspace/snippets.py
+	local fpath=$HOME/fdumps/workspace/snippets.py
 	if [ "$1" == "vim" ]; then
 		gvim $fpath
 	else
@@ -166,7 +186,7 @@ snippy() {
 }
 
 snipmake() {
-	local fpath=$HOME/workspace/Make.md
+	local fpath=$HOME/fdumps/workspace/Make.md
 	if [ "$1" == "vim" ]; then
 		gvim -c "set filetype=make" $fpath
 	else
@@ -175,7 +195,7 @@ snipmake() {
 }
 
 snipbash() {
-	local fpath=$HOME/workspace/snippets.sh
+	local fpath=$HOME/fdumps/workspace/snippets.sh
 	if [ "$1" == "vim" ]; then
 		gvim $fpath
 	else
@@ -184,6 +204,8 @@ snipbash() {
 }
 
 # quick editor stuff
+alias todo='gvim $HOME/fdumps/workspace/todo'
 alias quickc='gvim /tmp/quick.c'
 alias quickpy='gvim /tmp/quick.py'
+alias website='open $HOME/fdumps/website/index.html'
 

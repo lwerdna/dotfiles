@@ -25,18 +25,47 @@
 #   COMP_XXX is others
 # OUTPUTS:
 #   set COMP_REPLY to the possible words
-PATH_WIKI=${HOME}/workspace/wiki
-PATH_WIKI_ATTACHMENTS=${HOME}/workspace/wiki/attachments
+PATH_WIKI=${HOME}/fdumps/wiki
+PATH_WIKI_ATTACHMENTS=${HOME}/fdumps/wiki/attachments
 
 wiki() {
-	if [ "$1" == "" ]; then
+	local cmd
+	local fpath
+	
+	# assume argument is a command
+	cmd=$1
+	# empty? open home page
+	if [ "$cmd" == "" ]; then
 		typora $PATH_WIKI/Wiki.md
-	elif [ "$1" == "cd" ]; then
+		return 0
+	# change to wiki directory
+	elif [ "$cmd" == "cd" ]; then
 		cd $PATH_WIKI
-	elif [ "$1" == "files" ]; then
+		return 0
+	# push wiki directory
+	elif [ "$cmd" == "pushd" ]; then
+		pushd $PATH_WIKI
+		return 0
+	# open attachments folder
+	elif [ "$cmd" == "files" ]; then
 		open $PATH_WIKI_ATTACHMENTS
+		return 0
+	fi
+
+	# assume argument is a wiki file
+	# add .md if not present
+	fpath=$PATH_WIKI/$1
+	if [[ ! $fpath = *.md ]]; then
+		fpath="$fpath.md"
+	fi
+
+	if [ -f "$fpath" ]; then
+		echo "opening $fpath"
+		typora $fpath
 	else
-		typora $PATH_WIKI/$1.md
+		echo "creating $fpath"
+		touch $fpath
+		typora $fpath
 	fi
 }
 
@@ -48,7 +77,7 @@ _GetWikiFiles()
 	cur=${COMP_WORDS[COMP_CWORD]} # get current word being completed
 
 	pushd $PATH_WIKI > /dev/null
-	COMPREPLY=($(\ls -1 $cur*.md 2>/dev/null)) # \ls avoids alias, 2>/dev/null supresses "No such file.." msg
+	COMPREPLY=($(\ls -1 $cur* 2>/dev/null)) # \ls avoids alias, 2>/dev/null supresses "No such file.." msg
 	popd > /dev/null
 
 	return 0
