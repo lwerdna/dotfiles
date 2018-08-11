@@ -75,25 +75,31 @@ set fillchars+=vert:\
 "------------------------------------------------------------------------------
 
 if has("win32")
-"--------
-" windows
-"--------
+	"--------
+	" windows
+	"--------
 else
 if has("unix")
-" linux or mac
-let s:uname = system("uname")
+	"-------------
+	" linux or mac
+	"-------------
+	let s:uname = system("uname")
 if s:uname == "Darwin\n"
-"--------
-" mac
-"--------
-set guifont=Lucida\ Console:h12
+	"--------
+	" mac
+	"--------
+	set guifont=Lucida\ Console:h12
+	" disable? bracketed paste mode
+	set t_BE=
+	" arrow keys to not insert 0A,0B,0C,0D
+	set nocompatible
 else
-"--------
-" linux
-"--------
-set guifont=DejaVu\ Sans\ Mono\ 12
-" note: comma automatically added
-set tags+=/usr/src/linux-headers-3.16.0-30-generic/tags
+	"--------
+	" linux
+	"--------
+	set guifont=DejaVu\ Sans\ Mono\ 12
+	" note: comma automatically added
+	set tags+=/usr/src/linux-headers-3.16.0-30-generic/tags
 endif
 endif
 endif

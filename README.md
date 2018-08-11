@@ -4,23 +4,21 @@ The current way I'm using these is to symlink from my home directory into the re
 ln -s `pwd`/bashrc ~/.bashrc
 ```
 
-and at the top of .bashrc you should make sure $DOTFILES points to this directory.
-
 For gdb, I point the link at whatever architecture I am working on:
 ```
-ln -s $DOTFILES/gdbinit_mem .gdbinit_mem
-ln -s $DOTFILES/gdbinit_x64 .gdbinit
-ln -s $DOTFILES/gdbinit_arm .gdbinit
-ln -s $DOTFILES/gdbinit_aarch64 .gdbinit
+ln -s `pwd`/gdbinit_mem .gdbinit_mem
+ln -s `pwd`/gdbinit_x64 .gdbinit
+ln -s `pwd`/gdbinit_arm .gdbinit
+ln -s `pwd`/gdbinit_aarch64 .gdbinit
 ```
 
 For vim, you might have to create the ~/.vim directory:
 ```
-ln -s $DOTFILES/vimrc ~/.vimrc
-ln -s $DOTFILES/quickgnuplot.vim ~/.vim/quickgnuplot.vim
-ln -s $DOTFILES/quickpy.vim ~/.vim/quickpy.vim
-ln -s $DOTFILES/quickpng.vim ~/.vim/quickpng.vim
-ln -s $DOTFILES/quickc.vim ~/.vim/quickc.vim
+ln -s `pwd`/vimrc ~/.vimrc
+ln -s `pwd`/quickgnuplot.vim ~/.vim/quickgnuplot.vim
+ln -s `pwd`/quickpy.vim ~/.vim/quickpy.vim
+ln -s `pwd`/quickpng.vim ~/.vim/quickpng.vim
+ln -s `pwd`/quickc.vim ~/.vim/quickc.vim
 ```
 
 ### .gdbinit for aarch64 (gdbinit_arch64)
