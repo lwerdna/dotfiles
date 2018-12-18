@@ -1,13 +1,13 @@
+" for linux-like systems, this is ~/.vimrc
+" for windows systems, this is c:\Users\foo\_vimrc
+"
+" you can:
+" * copy this file to those locations
+" * link those locations to this file
+" * insert a source statement, eg on windows I have:
+"   c:\Users\foo\_vimrc contain source c:\Users\foo\repos\dotfiles\vimrc
+ 
 syntax on
-
-" vundle plugin manager, plugins
-" to install, add plugin here, then :PluginInstall from vim 
-"set rtp+=~/.vim/bundle/Vundle.vim
-"call vundle#begin()
-"Plugin 'godlygeek/tabular'
-"Plugin 'plasticboy/vim-markdown'
-"call vundle#end()
-"filetype plugin indent on
 
 " search stuff
 set ignorecase
@@ -78,6 +78,10 @@ if has("win32")
 	"--------
 	" windows
 	"--------
+	:set guioptions-=m  "remove menu bar
+	:set guioptions-=T  "remove toolbar
+	":set guioptions-=r  "remove right-hand scroll bar
+	":set guioptions-=L  "remove left-hand scroll bar
 else
 if has("unix")
 	"-------------
@@ -150,6 +154,8 @@ set nofoldenable
 :nnoremap <c-u> viwU
 
 " quick editors
+if has("win32")
+else
 source ~/.vim/quickgnuplot.vim
 autocmd BufRead quick.gplt call QuickGnuplotSetup()
 source ~/.vim/quickpy.vim
@@ -158,3 +164,4 @@ source ~/.vim/quickc.vim
 autocmd BufRead /tmp/quick.c call QuickCSetup()
 source ~/.vim/quickpng.vim
 " autocmd BufRead /tmp/quick.png call QuickPngSetup()
+endif
