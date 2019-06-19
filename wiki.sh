@@ -25,8 +25,8 @@
 #   COMP_XXX is others
 # OUTPUTS:
 #   set COMP_REPLY to the possible words
-PATH_WIKI=${HOME}/fdumps/wiki
-PATH_WIKI_ATTACHMENTS=${HOME}/fdumps/wiki/attachments
+PATH_WIKI=${HOME}/repos/lwerdna/wiki_public
+PATH_WIKI_ATTACHMENTS=${PATH_WIKI}/attachments
 
 wiki() {
 	local cmd
@@ -36,7 +36,10 @@ wiki() {
 	cmd=$1
 	# empty? open home page
 	if [ "$cmd" == "" ]; then
-		typora $PATH_WIKI/Wiki.md
+		TMP=`pwd`
+		cd $PATH_WIKI
+		typora Home.md
+		cd $TMP
 		return 0
 	# change to wiki directory
 	elif [ "$cmd" == "cd" ]; then
@@ -45,6 +48,10 @@ wiki() {
 	# push wiki directory
 	elif [ "$cmd" == "pushd" ]; then
 		pushd $PATH_WIKI
+		return 0
+	# attach file
+	elif [ "$cmd" == "attach" ]; then
+		cp $2 $PATH_WIKI_ATTACHMENTS
 		return 0
 	# open attachments folder
 	elif [ "$cmd" == "files" ]; then
@@ -87,4 +94,89 @@ _GetWikiFiles()
 # -F says call function
 # -o says that compsec generates fienames (used with -F)
 complete -F _GetWikiFiles -o filenames wiki
+
+#------------------------------------------------------------------------------
+# private wiki
+#------------------------------------------------------------------------------
+PATH_WIKIPRIV=${HOME}/fdumps/wiki
+PATH_WIKIPRIV_ATTACHMENTS=${HOME}/fdumps/wiki/attachments
+
+wikipriv() {
+	local cmd
+	local fpath
+	
+	# assume argument is a command
+	cmd=$1
+	# empty? open home page
+	if [ "$cmd" == "" ]; then
+		TMP=`pwd`
+		cd $PATH_WIKIPRIV
+		typora Home.md
+		cd $TMP
+		return 0
+	# change to wiki directory
+	elif [ "$cmd" == "cd" ]; then
+		cd $PATH_WIKIPRIV
+		return 0
+	# push wiki directory
+	elif [ "$cmd" == "pushd" ]; then
+		pushd $PATH_WIKIPRIV
+		return 0
+	# attach file
+	elif [ "$cmd" == "attach" ]; then
+		cp $2 $PATH_WIKIPRIV_ATTACHMENTS
+		return 0
+	# open attachments folder
+	elif [ "$cmd" == "files" ]; then
+		open $PATH_WIKIPRIV_ATTACHMENTS
+		return 0
+	fi
+
+	fpath=$PATH_WIKIPRIV/$1
+	if [[ ! $fpath = *.md ]]; then
+		fpath="$fpath.md"
+	fi
+
+	if [ -f "$fpath" ]; then
+		echo "opening $fpath"
+		typora $fpath
+	else
+		echo "creating $fpath"
+		touch $fpath
+		typora $fpath
+	fi
+}
+
+_GetWikiFilesPriv()
+{
+	local cur # pointer to current completion word
+
+	COMPREPLY=() # array of possible completions
+	cur=${COMP_WORDS[COMP_CWORD]} # get current word being completed
+
+	pushd $PATH_WIKIPRIV > /dev/null
+	COMPREPLY=($(\ls -1 $cur* 2>/dev/null)) # \ls avoids alias, 2>/dev/null supresses "No such file.." msg
+	popd > /dev/null
+
+	return 0
+}
+
+# https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion-Builtins.html
+# -F says call function
+# -o says that compsec generates fienames (used with -F)
+complete -F _GetWikiFilesPriv -o filenames wikipriv
+
+#------------------------------------------------------------------------------
+# migrate shiz
+#------------------------------------------------------------------------------
+wikimigrate() {
+	set -x
+	fname=$1
+	mv ${PATH_WIKIPRIV}/${fname} ${PATH_WIKI}
+	cd ${PATH_WIKI}
+	git add ${fname}
+	set +x
+}
+
+complete -F _GetWikiFilesPriv -o filenames wikimigrate
 
