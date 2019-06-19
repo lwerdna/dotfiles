@@ -1,5 +1,15 @@
+" for linux-like systems, this is ~/.vimrc
+" for windows systems, this is c:\Users\foo\_vimrc
+"
+" you can:
+" * copy this file to those locations
+" * link those locations to this file
+" * insert a source statement, eg on windows I have:
+"   c:\Users\foo\_vimrc contain source c:\Users\foo\repos\dotfiles\vimrc
+
 syntax on
 set number
+
 
 " search stuff
 set ignorecase
@@ -70,6 +80,10 @@ if has("win32")
 	"--------
 	" windows
 	"--------
+	:set guioptions-=m  "remove menu bar
+	:set guioptions-=T  "remove toolbar
+	":set guioptions-=r  "remove right-hand scroll bar
+	":set guioptions-=L  "remove left-hand scroll bar
 else
 if has("unix")
 	"-------------
