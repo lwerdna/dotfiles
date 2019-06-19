@@ -42,6 +42,8 @@ source ~/.bashrc_private
 # python
 ###############################################################################
 
+eval "$(pyenv init -)"
+
 function python_import_binja {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/vector35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
 }
@@ -53,48 +55,6 @@ function python_import_kaitai {
 function python_import_defaults {
 	echo "python_import_defaults()"
 }
-
-function python_choose2 {
-	unset PYTHONPATH
-
-	rm /usr/local/bin/python
-
-	# brew install
-	ln -s /usr/local/Cellar/python@2/2.7.16/bin/python /usr/local/bin/python
-	export PYTHONPATH=/usr/local/lib/python2.7/site-packages
-
-	# "Library" install
-	#export PYTHONPATH=${PYTHONPATH}:/Library/Python/2.7/site-packages
-
-	# autils
-	export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY}
-
-	python_import_defaults
-}
-
-function python_choose3 {
-	unset PYTHONPATH
-
-	rm /usr/local/bin/python
-	rm /usr/local/bin/python3
-
-	# brew installed
-	ln -s /usr/local/Cellar/python/3.7.3/bin/python3 /usr/local/bin/python
-	ln -s /usr/local/Cellar/python/3.7.3/bin/python3 /usr/local/bin/python3
-	export PYTHONPATH=/usr/local/lib/python3.7/site-packages
-
-	#ln -s /Library/Frameworks/Python.framework/Versions/3.6/bin/python3 /usr/local/bin/python
-	#ln -s /Library/Frameworks/Python.framework/Versions/3.6/bin/python3 /usr/local/bin/python3
-	#export PYTHONPATH=${PYTHONPATH}:/Library/Python/3.7/site-packages
-
-	# autils
-	export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY3}
-
-	python_import_defaults
-}
-	
-python_choose3
-
 
 ###############################################################################
 # per-platform settings
