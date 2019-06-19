@@ -1,13 +1,5 @@
 syntax on
-
-" vundle plugin manager, plugins
-" to install, add plugin here, then :PluginInstall from vim 
-"set rtp+=~/.vim/bundle/Vundle.vim
-"call vundle#begin()
-"Plugin 'godlygeek/tabular'
-"Plugin 'plasticboy/vim-markdown'
-"call vundle#end()
-"filetype plugin indent on
+set number
 
 " search stuff
 set ignorecase
@@ -49,9 +41,10 @@ set autoindent
 " misc
 "------------------------------------------------------------------------------
 
-set nowrap
+set wrap
 set backspace+=start,eol,indent
 set noswapfile
+set visualbell
 
 " other progs
 set tags=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../../../../../tags
@@ -66,7 +59,6 @@ set statusline+=[%p%%]
 set statusline+=\ 
 set statusline+=[LEN=%L]		" total lines
 set laststatus=2 
-set noantialias
 set fillchars+=vert:\ 
 " TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
 
@@ -88,7 +80,11 @@ if s:uname == "Darwin\n"
 	"--------
 	" mac
 	"--------
-	set guifont=Lucida\ Console:h12
+	set noantialias
+	"set guifont=Lucida\ Console:h12
+	"set guifont=Monaco:h12
+	"set guifont=Inconsolata:h14
+	set guifont=Terminus\ (TTF):h16
 	" disable? bracketed paste mode
 	set t_BE=
 	" arrow keys to not insert 0A,0B,0C,0D
@@ -105,13 +101,19 @@ endif
 endif
 
 " TIP `:colorscheme <tab>` to cycle thru defaults`
-colorscheme desert
+if has("gui_running")
+	colorscheme solarized
+else
+	colorscheme desert
+endif
 
 " file types
 au BufNewFile,BufFilePre,BufRead *.md set filetype=markdown
 au BufRead,BufNewFile *.spi set filetype=spice
 au BufRead,BufNewFile *.cir set filetype=spice
 au BufRead,BufNewFile *.gplt set filetype=gnuplot
+au BufRead,BufNewFile *.ksy set filetype=yaml
+au BufRead,BufNewFile *.json set foldmethod=syntax
 au! Syntax spice source ~/.vim/syntax/spice.vim
 
 " regions of highlighting
@@ -133,6 +135,8 @@ set nofoldenable
 " fast edit .vimrc
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>:echo "editing" $MYVIMRC<cr>
 :nnoremap <leader>sv :source $MYVIMRC<cr>:echo "sourcing" $MYVIMRC<cr>
+
+:nnoremap <leader>bnew "hithere=strftime("%s")<CR>PA
 
 " move thru visual splits
 :nnoremap <c-h> <c-w>h
@@ -158,3 +162,28 @@ source ~/.vim/quickc.vim
 autocmd BufRead /tmp/quick.c call QuickCSetup()
 source ~/.vim/quickpng.vim
 " autocmd BufRead /tmp/quick.png call QuickPngSetup()
+
+" misc
+let g:vim_json_syntax_conceal = 0
+
+"
+function! VimBroadcastEdit()
+	if empty(glob("/tmp/vimwrote"))
+		echo "no IPC file /tmp/vimwrote"
+		return
+	endif
+
+	let l:fpath = expand('%:p')
+	if empty(l:fpath)
+		echo "no current file path"
+		return
+	endif
+
+	" echo "broadcasting!"
+	let l:cmd = "echo ".l:fpath." >> /tmp/vimwrote"
+	" echo "executing: ".l:cmd
+	call system(l:cmd)
+endfunction
+
+:inoremap <leader>r <esc>:call VimBroadcastEdit()<cr>
+:map <leader>r :call VimBroadcastEdit()<cr>
