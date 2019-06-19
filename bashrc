@@ -1,4 +1,10 @@
 echo "my bashrc executing..."
+export PATH=
+export PATH=$PATH:/usr/local/bin
+export PATH=$PATH:/usr/bin
+export PATH=$PATH:/bin
+export PATH=$PATH:$HOME/bin
+export PATH=$PATH:/sbin
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
@@ -10,27 +16,85 @@ export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
 # go stuff
-export GOPATH=${HOME}/go
-export PATH=${PATH}:${HOME}/go/bin
+#export GOPATH=${HOME}/go
+#export PATH=${PATH}:${HOME}/go/bin
+#export PATH=${PATH}:${HOME}/bin
+# qt
+export PATH=${PATH}:${HOME}/QtNewer/5.12.3/clang_64/bin
+#
+export LLVM_INSTALL_DIR=${HOME}/Downloads/libclang-release_70-based-mac
+
+# binary ninja
+export BINJA=${HOME}/repos/vector35/binaryninja
+export BINJAAPI=${BINJA}/api
+export BINJAPY=${BINJA}/ui/binaryninja.app/Contents/Resources/python/binaryninja
+export BINJAPLUGS=${HOME}/Library/Application\ Support/Binary\ Ninja/plugins/
+export BINJAPLUGINS=${HOME}/Library/Application\ Support/Binary\ Ninja/plugins/
 
 # shellcode compiler
-export SCC=${HOME}/repos/v35/scc/scc
+#export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
+#export PATH=${PATH}:${HOME}/repos/vector35/binaryninja/scc/
+
+# local private (non github) stuff
+source ~/.bashrc_private
 
 ###############################################################################
 # python
 ###############################################################################
-function choose_python2 {
-	export PYTHONPATH=/usr/local/lib/python2.7/site-packages
-	export PYTHONPATH=${PYTHONPATH}:/Library/Python/2.7/site-packages
+
+function python_import_binja {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/vector35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
-	export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY}
 }
 
-function choose_python3 {
-	export PYTHONPATH=/usr/local/lib/python3.7/site-packages
-	export PYTHONPATH=${PYTHONPATH}:/Library/Python/3.7/site-packages
-	export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY3}
+function python_import_kaitai {
+	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
+
+function python_import_defaults {
+	echo "python_import_defaults()"
+}
+
+function python_choose2 {
+	unset PYTHONPATH
+
+	rm /usr/local/bin/python
+
+	# brew install
+	ln -s /usr/local/Cellar/python@2/2.7.16/bin/python /usr/local/bin/python
+	export PYTHONPATH=/usr/local/lib/python2.7/site-packages
+
+	# "Library" install
+	#export PYTHONPATH=${PYTHONPATH}:/Library/Python/2.7/site-packages
+
+	# autils
+	export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY}
+
+	python_import_defaults
+}
+
+function python_choose3 {
+	unset PYTHONPATH
+
+	rm /usr/local/bin/python
+	rm /usr/local/bin/python3
+
+	# brew installed
+	ln -s /usr/local/Cellar/python/3.7.3/bin/python3 /usr/local/bin/python
+	ln -s /usr/local/Cellar/python/3.7.3/bin/python3 /usr/local/bin/python3
+	export PYTHONPATH=/usr/local/lib/python3.7/site-packages
+
+	#ln -s /Library/Frameworks/Python.framework/Versions/3.6/bin/python3 /usr/local/bin/python
+	#ln -s /Library/Frameworks/Python.framework/Versions/3.6/bin/python3 /usr/local/bin/python3
+	#export PYTHONPATH=${PYTHONPATH}:/Library/Python/3.7/site-packages
+
+	# autils
+	export PYTHONPATH=${PYTHONPATH}:${PATH_AUTILS_PY3}
+
+	python_import_defaults
+}
+	
+python_choose3
+
 
 ###############################################################################
 # per-platform settings
@@ -39,7 +103,6 @@ function choose_python3 {
 platform=`uname`
 # defaults
 export EDITOR='vim'
-choose_python2
 
 # platform-specifics
 if [[ $platform == 'Darwin' ]]; then
@@ -47,6 +110,7 @@ if [[ $platform == 'Darwin' ]]; then
 
 	# command-line utils
 	alias ls='ls -G -t -r'
+	#alias ls='ls -G'
 
 	# apps
 	alias macdown='open -a MacDown'
@@ -65,9 +129,13 @@ if [[ $platform == 'Darwin' ]]; then
 	export ANDROID_SDK=${HOME}/Library/Android/sdk
 	export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
 	export NDK_R10E=${HOME}/android-ndk-r10e
+	export NDK_R14B=${HOME}/android-ndk-r14b
 	export NDK_R15C=${HOME}/android-ndk-r15c
+	export NDK_R17C=${HOME}/android-ndk-r17c
 	export NDK=$NDK_R15C
-	alias gdbndk=$NDK/prebuilt/darwin-x86_64/bin/gdb
+
+	# qt
+	export PATH=${PATH}:${HOME}/Qt5.11.1/clang_64/bin
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
@@ -89,10 +157,8 @@ fi
 # platform-generals that depended on the platform-specifics
 export PATH=${PATH}:${ANDROID_SDK}/tools
 export PATH=${PATH}:${ANDROID_SDK}/tools/bin
-export PATH=${PATH}:${ANDROID_SDK}/platform-tools
-
-# qt
-export PATH=${PATH}:${HOME}/Qt5.6.0/5.6/clang_64/bin
+export PATH=${PATH}:${ANDROID_SDK}/platform-tools-ADB39
+export PATH=${PATH}:${ANDROID_SDK}/build-tools/28.0.1
 
 ###############################################################################
 # cross compiler stuff
@@ -154,24 +220,27 @@ jotter() {
 	# $@ is array-like construct of all positional parameters
 	# https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
 	local fpath=$1
-	if [ "$2" == "gvim" ]; then
+	local text=${@:2}
+	if [ "$text" == "gvim" ]; then
 		gvim $fpath
-	elif [ "$2" == "vim" ]; then
+	elif [ "$text" == "vim" ]; then
 		vim + $fpath
-	elif [ "$2" == "date" ]; then
+	elif [ "$text" == "typora" ]; then
+		open -a typora $fpath	
+	elif [ "$text" == "date" ]; then
 		echo '' >> $fpath
-		echo '# '`date +"%Y-%m-%d %T"` >> $fpath
-	elif [ "$2" == "" ]; then
+		echo '# '`date +"%Y-%m-%d %T %A"` >> $fpath
+	elif [ "$text" == "" ]; then
 		less +G $fpath
 	else
-		echo '' >> $fpath
-		echo $@ >> $fpath
+		#echo '' >> $fpath
+		echo $text >> $fpath
 	fi
 }
 
 notes() {
 	local fpath=$HOME/fdumps/journals/notes.md
-	jotter $fpath $1
+	jotter $fpath $@
 }
 
 lists() {
@@ -179,26 +248,27 @@ lists() {
 	if [ "$2" == "" ]; then
 		jotter $fpath gvim
 	else
-		jotter $fpath $2
+		jotter $fpath $@
+	fi
+}
+
+snipper() {
+	local fpath=$1
+	if [ "$2" == "gvim" ]; then
+		gvim $fpath
+	else
+		less $fpath
 	fi
 }
 
 snipc() {
-	local fpath=$HOME/fdumps/workspace/snippets.c
-	if [ "$1" == "vim" ]; then
-		gvim $fpath
-	else
-		less $fpath
-	fi
+	snipper $HOME/fdumps/workspace/snippets.c $1
 }
-
 snippy() {
-	local fpath=$HOME/fdumps/workspace/snippets.py
-	if [ "$1" == "vim" ]; then
-		gvim $fpath
-	else
-		less $fpath
-	fi
+	wiki PythonCookbook.md
+}
+snipbash() {
+	snipper $HOME/fdumps/workspace/snippets.sh $1
 }
 
 snipmake() {
@@ -210,18 +280,17 @@ snipmake() {
 	fi
 }
 
-snipbash() {
-	local fpath=$HOME/fdumps/workspace/snippets.sh
-	if [ "$1" == "vim" ]; then
-		gvim $fpath
-	else
-		less $fpath
-	fi
-}
-
 # quick editor stuff
 alias todo='gvim $HOME/fdumps/workspace/todo'
 alias quickc='gvim /tmp/quick.c'
 alias quickpy='gvim /tmp/quick.py'
 alias website='open $HOME/fdumps/website/index.html'
+alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
 
+# Enable syntax-highlighting in less.
+# brew install source-highlight
+# First, add these two lines to ~/.bashrc
+export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
+export LESS=" -R "
+alias less='less -m -N -g -i -J --underline-special --SILENT'
+alias more='less'
