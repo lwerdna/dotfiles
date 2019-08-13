@@ -8,7 +8,7 @@
 "   c:\Users\foo\_vimrc contain source c:\Users\foo\repos\dotfiles\vimrc
 
 syntax on
-set number
+set nonumber
 
 
 " search stuff
@@ -115,9 +115,12 @@ endif
 endif
 
 " TIP `:colorscheme <tab>` to cycle thru defaults`
+set background=light
 if has("gui_running")
-	colorscheme solarized
+	" colorscheme solarized
+	colorscheme desert
 else
+	" colorscheme solarized
 	colorscheme desert
 endif
 
@@ -201,3 +204,6 @@ endfunction
 
 :inoremap <leader>r <esc>:call VimBroadcastEdit()<cr>
 :map <leader>r :call VimBroadcastEdit()<cr>
+
+" ALE linter settings
+let b:ale_warn_about_trailing_whitespace = 1
