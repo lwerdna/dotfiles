@@ -8,6 +8,7 @@ export PATH=$PATH:/sbin
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
+export GHIDRAHOME=${HOME}/Downloads/ghidra_9.0.4
 
 # ALIB various points
 export PATH_AUTILS=${HOME}/repos/lwerdna/autils
@@ -25,11 +26,14 @@ export PATH=${PATH}:${HOME}/QtNewer/5.12.3/clang_64/bin
 export LLVM_INSTALL_DIR=${HOME}/Downloads/libclang-release_70-based-mac
 
 # binary ninja
-export BINJA=${HOME}/repos/vector35/binaryninja
-export BINJAAPI=${BINJA}/api
-export BINJAPY=${BINJA}/ui/binaryninja.app/Contents/Resources/python/binaryninja
-export BINJAPLUGS=${HOME}/Library/Application\ Support/Binary\ Ninja/plugins/
-export BINJAPLUGINS=${HOME}/Library/Application\ Support/Binary\ Ninja/plugins/
+export BINJA=$HOME/repos/vector35/binaryninja
+export BINJA_APP=$BINJA/ui/binaryninja.app
+export BINJA_API=$BINJA/api
+export BINJA_PY=$BINJA_APP/Contents/Resources/python
+export BINJA_PY_UI_2=$BINJA_APP/Contents/Resources/python2
+export BINJA_PY_UI_3=$BINJA_APP/Contents/Resources/python3
+export BINJA_PLUGS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
+export BINJA_PLUGINS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
@@ -44,16 +48,18 @@ source ~/.bashrc_private
 
 eval "$(pyenv init -)"
 
-function python_import_binja {
-	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/vector35/binaryninja/ui/binaryninja.app/Contents/Resources/python/
+function python_import_binja2 {
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY_UI_2}
+}
+
+function python_import_binja3 {
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY_UI_3}
 }
 
 function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
-}
-
-function python_import_defaults {
-	echo "python_import_defaults()"
 }
 
 ###############################################################################
@@ -74,6 +80,7 @@ if [[ $platform == 'Darwin' ]]; then
 
 	# apps
 	alias macdown='open -a MacDown'
+	alias firefox='open -a firefox'
 	alias typora='open -a typora'
 
 	# for midnight commander
@@ -246,6 +253,10 @@ alias quickc='gvim /tmp/quick.c'
 alias quickpy='gvim /tmp/quick.py'
 alias website='open $HOME/fdumps/website/index.html'
 alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
+alias ghidra='$GHIDRAHOME/ghidraRun'
+alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
+alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
+alias ghidradoc='open $GHIDRAHOME/docs/'
 
 # Enable syntax-highlighting in less.
 # brew install source-highlight
@@ -254,3 +265,4 @@ export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
 alias less='less -m -N -g -i -J --underline-special --SILENT'
 alias more='less'
+
