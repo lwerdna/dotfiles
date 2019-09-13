@@ -16,15 +16,6 @@ export PATH_AUTILS_C=${PATH_AUTILS}/c
 export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
-# go stuff
-#export GOPATH=${HOME}/go
-#export PATH=${PATH}:${HOME}/go/bin
-#export PATH=${PATH}:${HOME}/bin
-# qt
-export PATH=${PATH}:${HOME}/QtNewer/5.12.3/clang_64/bin
-#
-export LLVM_INSTALL_DIR=${HOME}/Downloads/libclang-release_70-based-mac
-
 # binary ninja
 export BINJA=$HOME/repos/vector35/binaryninja
 export BINJA_APP=$BINJA/ui/binaryninja.app
@@ -102,7 +93,7 @@ if [[ $platform == 'Darwin' ]]; then
 	export NDK=$NDK_R15C
 
 	# qt
-	export PATH=${PATH}:${HOME}/Qt5.11.1/clang_64/bin
+	export PATH=${PATH}:${HOME}/QtNewer/5.12.3/clang_64/bin
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
@@ -251,6 +242,7 @@ snipmake() {
 alias todo='gvim $HOME/fdumps/workspace/todo'
 alias quickc='gvim /tmp/quick.c'
 alias quickpy='gvim /tmp/quick.py'
+alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias website='open $HOME/fdumps/website/index.html'
 alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
 alias ghidra='$GHIDRAHOME/ghidraRun'
@@ -263,6 +255,7 @@ alias ghidradoc='open $GHIDRAHOME/docs/'
 # First, add these two lines to ~/.bashrc
 export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
 export LESS=" -R "
-alias less='less -m -N -g -i -J --underline-special --SILENT'
+alias less='less -m -n -g -i -J --underline-special --SILENT'
 alias more='less'
 
+alias nes='gvim /Users/andrewl/repos/vector35/binaryninja/api/python/examples/nes.py'
