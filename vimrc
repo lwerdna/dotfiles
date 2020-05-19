@@ -202,8 +202,14 @@ function! VimBroadcastEdit()
 	call system(l:cmd)
 endfunction
 
-:inoremap <leader>r <esc>:call VimBroadcastEdit()<cr>
-:map <leader>r :call VimBroadcastEdit()<cr>
+":inoremap <leader>r <esc>:call VimBroadcastEdit()<cr>
+":map <leader>r :call VimBroadcastEdit()<cr>
 
 " ALE linter settings
-let b:ale_warn_about_trailing_whitespace = 1
+"let b:ale_warn_about_trailing_whitespace = 1
+
+" leader-r to write and run current program
+" nnoremap <leader>r :w<enter>:!%:p<enter>
+
+nnoremap <leader>r :w<enter>:make<enter>
+
