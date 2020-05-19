@@ -1,10 +1,12 @@
 echo "my bashrc executing..."
 export PATH=
-export PATH=$PATH:/usr/local/bin
-export PATH=$PATH:/usr/bin
 export PATH=$PATH:/bin
-export PATH=$PATH:$HOME/bin
+export PATH=$PATH:/usr/bin
+export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/sbin
+export PATH=$PATH:/usr/sbin
+export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:$HOME/bin
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
@@ -53,6 +55,9 @@ function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
 
+python_import_binja3
+export PYTHONPATH='/Applications/Binary Ninja.app/Contents/Resources/python'
+
 ###############################################################################
 # per-platform settings
 ###############################################################################
@@ -73,11 +78,16 @@ if [[ $platform == 'Darwin' ]]; then
 	alias macdown='open -a MacDown'
 	alias firefox='open -a firefox'
 	alias typora='open -a typora'
+	alias diffmerge='open -a diffmerge'
+	alias geany='open -a geany'
+	alias drawbot='open -a drawbot'
+	alias vlc='open -a vlc'
 
 	# for midnight commander
 	export VIEWER='open'
 
 	# java
+	export JAVA_HOME=${HOME}/Downloads/jdk-11.0.1.jdk/Contents/Home
 	export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
 	#export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
 	alias antlr4='java -jar /usr/local/lib/antlr-4.5.1-complete.jar'
@@ -93,7 +103,16 @@ if [[ $platform == 'Darwin' ]]; then
 	export NDK=$NDK_R15C
 
 	# qt
-	export PATH=${PATH}:${HOME}/QtNewer/5.12.3/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt5.14.0/5.14.0/clang_64/bin
+
+	# LLVM
+	export PATH=$PATH:${HOME}/Downloads/llvm-8.0.0-x86_64-apple-darwin/bin
+	export LLVM_INSTALL_DIR=${HOME}/Downloads/llvm-8.0.0-x86_64-apple-darwin
+
+	# LLDB server
+	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
+	# SML NJ
+	export PATH=$PATH:/usr/local/smlnj/bin
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
@@ -238,13 +257,37 @@ snipmake() {
 	fi
 }
 
+testpy() {
+	if test -f "./test.py"; then
+		echo "already exists"
+	else
+		echo -e "#!/usr/bin/env python\n" > ./test.py
+		echo -e "print(\"Hello, world!\")\n" >> ./test.py
+		chmod +x ./test.py
+	fi
+	gvim + test.py
+}
+
+testc() {
+	if test -f "./test.c"; then
+		echo "already exists"
+	else
+		echo -e "#include <stdio.h>\n" > ./test.c
+		echo -e "int main(int argc, char **argv)" >> ./test.c
+		echo -e "{" >> ./test.c
+		echo -e "\tprintf(\"Hello, world!\");\n" >> ./test.c
+		echo -e "}" >> ./test.c
+	fi
+	gvim +6 test.c
+}
+
 # quick editor stuff
 alias todo='gvim $HOME/fdumps/workspace/todo'
 alias quickc='gvim /tmp/quick.c'
-alias quickpy='gvim /tmp/quick.py'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias website='open $HOME/fdumps/website/index.html'
-alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
+#alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
+alias binja='/Applications/Binary\ Ninja.app/Contents/MacOS/binaryninja'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
 alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
