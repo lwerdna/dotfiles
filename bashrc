@@ -20,11 +20,12 @@ export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
 # binary ninja
 export BINJA=$HOME/repos/vector35/binaryninja
-export BINJA_APP=$BINJA/ui/binaryninja.app
-export BINJA_API=$BINJA/api
+export BINJA_APP_BUILT=$BINJA/ui/binaryninja.app
+export BINJA_APP_INSTALLED=/Applications/Binary\ Ninja.app
+export BINJA_APP=$BINJA_APP_INSTALLED
+
 export BINJA_PY=$BINJA_APP/Contents/Resources/python
-export BINJA_PY_UI_2=$BINJA_APP/Contents/Resources/python2
-export BINJA_PY_UI_3=$BINJA_APP/Contents/Resources/python3
+export BINJA_PY3=$BINJA_APP/Contents/Resources/python3
 export BINJA_PLUGS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
 export BINJA_PLUGINS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
 
@@ -41,22 +42,17 @@ source ~/.bashrc_private
 
 eval "$(pyenv init -)"
 
-function python_import_binja2 {
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY_UI_2}
-}
-
 function python_import_binja3 {
 	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY_UI_3}
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY3}
 }
 
 function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
 
+export PYTHONPATH=
 python_import_binja3
-export PYTHONPATH='/Applications/Binary Ninja.app/Contents/Resources/python'
 
 ###############################################################################
 # per-platform settings
