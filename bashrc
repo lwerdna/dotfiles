@@ -78,6 +78,7 @@ if [[ $platform == 'Darwin' ]]; then
 	alias geany='open -a geany'
 	alias drawbot='open -a drawbot'
 	alias vlc='open -a vlc'
+	alias coqide='/Applications/CoqIDE_8.11.1.app/Contents/MacOS/coqide'
 
 	# for midnight commander
 	export VIEWER='open'
