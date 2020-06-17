@@ -20,6 +20,8 @@ install_gdb_aarch64:
 	ln -s -f `pwd`/gdbinit_aarch64 ~/.gdbinit
 
 install_vim:
+	if [! -d "${HOME}/.vim" ]; then mkdir ${HOME}/.vim; fi
+	if [! -d "${HOME}/.vim/ftplugin" ]; then mkdir ${HOME}/.vim/ftplugin; fi
 	ln -s -f `pwd`/vimrc ~/.vimrc
 	ln -s -f `pwd`/quickgnuplot.vim ~/.vim/quickgnuplot.vim
 	ln -s -f `pwd`/quickpy.vim ~/.vim/quickpy.vim
