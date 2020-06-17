@@ -31,7 +31,7 @@ PATH_WIKI_ATTACHMENTS=${PATH_WIKI}/attachments
 wiki() {
 	local cmd
 	local fpath
-	
+
 	# assume argument is a command
 	cmd=$1
 	# empty? open home page
@@ -76,6 +76,31 @@ wiki() {
 	fi
 }
 
+# same as wiki, but appends a "posted at..." message with current date
+wikilog() {
+	local fpath
+
+	# assume argument is a wiki file
+	# add .md if not present
+	fpath=$PATH_WIKI/$1
+	if [[ ! $fpath = *.md ]]; then
+		fpath="$fpath.md"
+	fi
+
+	if [ -f "$fpath" ]; then
+		echo "opening $fpath"
+	else
+		echo "creating $fpath"
+		touch $fpath
+	fi
+
+	echo '' >> $fpath
+	echo '<div style="position:absolute; background:lightgrey; width:100%">Posted' `gdate --iso-8601`'</div>' >> $fpath
+	echo '' >> $fpath
+
+	typora $fpath
+}
+
 _GetWikiFiles()
 {
 	local cur # pointer to current completion word
@@ -94,5 +119,6 @@ _GetWikiFiles()
 # -F says call function
 # -o says that compsec generates fienames (used with -F)
 complete -F _GetWikiFiles -o filenames wiki
+complete -F _GetWikiFiles -o filenames wikilog
 
 
