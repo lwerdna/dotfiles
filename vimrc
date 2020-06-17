@@ -211,5 +211,8 @@ endfunction
 " leader-r to write and run current program
 " nnoremap <leader>r :w<enter>:!%:p<enter>
 
-nnoremap <leader>r :w<enter>:make<enter>
+autocmd FileType python map <buffer> <leader>r :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+autocmd FileType python imap <buffer> <leader>r <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+
+"nnoremap <leader>r :w<enter>:make<enter>
 
