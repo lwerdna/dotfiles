@@ -100,7 +100,7 @@ if [[ $platform == 'Darwin' ]]; then
 	export NDK=$NDK_R15C
 
 	# qt
-	export PATH=${PATH}:${HOME}/Qt5.14.0/5.14.0/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt5.14.2/5.14.2/clang_64/bin
 
 	# LLVM
 	export PATH=$PATH:${HOME}/Downloads/llvm-8.0.0-x86_64-apple-darwin/bin
