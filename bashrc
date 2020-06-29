@@ -21,8 +21,8 @@ export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 # binary ninja
 export BINJA=$HOME/repos/vector35/binaryninja
 export BINJA_APP_BUILT=$BINJA/ui/binaryninja.app
-export BINJA_APP_INSTALLED=/Applications/Binary\ Ninja.app
-export BINJA_APP=$BINJA_APP_INSTALLED
+export BINJA_APP_INSTALLED=/Applications/Binary\ Ninja\ DEV.app
+export BINJA_APP=$BINJA_APP_BUILT
 
 export BINJA_PY=$BINJA_APP/Contents/Resources/python
 export BINJA_PY3=$BINJA_APP/Contents/Resources/python3
@@ -284,7 +284,7 @@ alias quickc='gvim /tmp/quick.c'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias website='open $HOME/fdumps/website/index.html'
 #alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
-alias binja='/Applications/Binary\ Ninja.app/Contents/MacOS/binaryninja'
+alias binja='$BINJA_APP_BUILT/Contents/MacOS/binaryninja'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
 alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
