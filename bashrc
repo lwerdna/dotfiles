@@ -20,7 +20,8 @@ export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
 # binary ninja
 export BINJA=$HOME/repos/vector35/binaryninja
-export BINJA_APP_BUILT=$BINJA/ui/binaryninja.app
+export BINJA_API=$BINJA/api
+export BINJA_APP_BUILT=$BINJA/out/binaryninja.app
 export BINJA_APP_INSTALLED=/Applications/Binary\ Ninja\ DEV.app
 export BINJA_APP=$BINJA_APP_BUILT
 
@@ -28,6 +29,8 @@ export BINJA_PY=$BINJA_APP/Contents/Resources/python
 export BINJA_PY3=$BINJA_APP/Contents/Resources/python3
 export BINJA_PLUGS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
 export BINJA_PLUGINS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
+
+export BN_API_PATH=$HOME/repos/vector35/binaryninja-api
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
@@ -41,10 +44,10 @@ source ~/.bashrc_private
 ###############################################################################
 
 eval "$(pyenv init -)"
+pyenv shell 3.7.4 2.7.16
 
 function python_import_binja3 {
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY3}
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}:${BINJA_PY3}
 }
 
 function python_import_kaitai {
@@ -100,11 +103,11 @@ if [[ $platform == 'Darwin' ]]; then
 	export NDK=$NDK_R15C
 
 	# qt
-	export PATH=${PATH}:${HOME}/Qt5.14.2/5.14.2/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
 
 	# LLVM
-	export PATH=$PATH:${HOME}/Downloads/llvm-8.0.0-x86_64-apple-darwin/bin
-	export LLVM_INSTALL_DIR=${HOME}/Downloads/llvm-8.0.0-x86_64-apple-darwin
+	export PATH=$PATH:${HOME}/Downloads/clang+llvm-10.0.0-x86_64-apple-darwin/bin
+	export LLVM_INSTALL_DIR=${HOME}/Downloads/clang+llvm-10.0.0-x86_64-apple-darwin
 
 	# LLDB server
 	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
@@ -211,6 +214,8 @@ jotter() {
 		echo $text >> $fpath
 	fi
 }
+
+export PATH_KB=$HOME/fdumps/wiki
 
 notes() {
 	local fpath=$HOME/fdumps/journals/notes.md
