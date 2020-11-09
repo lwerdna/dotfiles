@@ -26,7 +26,7 @@
 # OUTPUTS:
 #   set COMP_REPLY to the possible words
 PATH_WIKI=${HOME}/fdumps/wiki
-PATH_WIKI_ATTACHMENTS=${PATH_WIKI}/attachments
+PATH_WIKI_ASSETS=${PATH_WIKI}/assets
 
 wiki() {
 	local cmd
@@ -51,11 +51,11 @@ wiki() {
 		return 0
 	# attach file
 	elif [ "$cmd" == "attach" ]; then
-		cp $2 $PATH_WIKI_ATTACHMENTS
+		cp $2 $PATH_WIKI_ASSETS
 		return 0
-	# open attachments folder
+	# open assets folder
 	elif [ "$cmd" == "files" ]; then
-		open $PATH_WIKI_ATTACHMENTS
+		open $PATH_WIKI_ASSETS
 		return 0
 	fi
 
@@ -66,9 +66,11 @@ wiki() {
 		fpath="$fpath.md"
 	fi
 
+	# file exists
 	if [ -f "$fpath" ]; then
 		echo "opening $fpath"
 		typora $fpath
+	# file doesnt exist, create!
 	else
 		echo "creating $fpath"
 		touch $fpath
