@@ -19,18 +19,14 @@ export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
 # binary ninja
-export BINJA=$HOME/repos/vector35/binaryninja
-export BINJA_API=$BINJA/api
-export BINJA_APP_BUILT=$BINJA/out/binaryninja.app
-export BINJA_APP_INSTALLED=/Applications/Binary\ Ninja\ DEV.app
-export BINJA_APP=$BINJA_APP_BUILT
+export BINJA_SOURCE=$HOME/repos/vector35/binaryninja
+export BINJA_API=$BINJA_SOURCE/api
+export BINJA_BUILD=$BINJA_SOURCE/build_debug
+export BINJA_APP=$BINJA_BUILD/out/binaryninja.app
 
 export BINJA_PY=$BINJA_APP/Contents/Resources/python
-export BINJA_PY3=$BINJA_APP/Contents/Resources/python3
 export BINJA_PLUGS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
-export BINJA_PLUGINS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
-
-export BN_API_PATH=$HOME/repos/vector35/binaryninja-api
+export BINJA_PLUGINS=$BINJA_PLUGS
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
@@ -46,8 +42,8 @@ source ~/.bashrc_private
 eval "$(pyenv init -)"
 pyenv shell 3.7.4 2.7.16
 
-function python_import_binja3 {
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}:${BINJA_PY3}
+function python_import_binja {
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
 }
 
 function python_import_kaitai {
@@ -55,7 +51,7 @@ function python_import_kaitai {
 }
 
 export PYTHONPATH=
-python_import_binja3
+python_import_binja
 
 ###############################################################################
 # per-platform settings
@@ -100,7 +96,8 @@ if [[ $platform == 'Darwin' ]]; then
 	export NDK_R14B=${HOME}/android-ndk-r14b
 	export NDK_R15C=${HOME}/android-ndk-r15c
 	export NDK_R17C=${HOME}/android-ndk-r17c
-	export NDK=$NDK_R15C
+	export NDK_R21D=${HOME}/android-ndk-r21d-built
+	export NDK=$NDK_R21D
 
 	# qt
 	export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
@@ -289,7 +286,7 @@ alias quickc='gvim /tmp/quick.c'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias website='open $HOME/fdumps/website/index.html'
 #alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
-alias binja='$BINJA_APP_BUILT/Contents/MacOS/binaryninja'
+alias binja='$BINJA_APP/Contents/MacOS/binaryninja'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
 alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
@@ -303,4 +300,6 @@ export LESS=" -R "
 alias less='less -m -n -g -i -J --underline-special --SILENT'
 alias more='less'
 
-alias nes='gvim /Users/andrewl/repos/vector35/binaryninja/api/python/examples/nes.py'
+alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
+
+source ~/.bash_profile
