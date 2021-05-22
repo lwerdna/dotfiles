@@ -22,11 +22,13 @@ export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 export BINJA_SOURCE=$HOME/repos/vector35/binaryninja
 export BINJA_API=$BINJA_SOURCE/api
 export BINJA_BUILD=$BINJA_SOURCE/build_debug
-export BINJA_APP=$BINJA_BUILD/out/binaryninja.app
 
-export BINJA_PY=$BINJA_APP/Contents/Resources/python
-export BINJA_PLUGS=$HOME/Library/Application\ Support/Binary\ Ninja/plugins
-export BINJA_PLUGINS=$BINJA_PLUGS
+export BINJA_APP_BUILT=$BINJA_BUILD/out/binaryninja.app
+export BINJA_APP_DEV="/Applications/Binary Ninja DEV.app"
+export BINJA_APP_RELEASE="/Applications/Binary Ninja RELEASE.app"
+
+export BN_API_PATH=$HOME/repos/vector35/binaryninja/api
+export BN_INSTALL_DIR=$HOME/repos/vector35/binaryninja/out/binaryninja.app
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
@@ -42,16 +44,28 @@ source ~/.bashrc_private
 eval "$(pyenv init -)"
 pyenv shell 3.7.4 2.7.16
 
-function python_import_binja {
+function python_import_binja_built {
+	export BINJA_PY=$BINJA_APP_BUILT/Contents/Resources/python
 	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
+}
+
+function python_import_binja_dev {
+	export BINJA_PY=$BINJA_APP_DEV/Contents/Resources/python
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
+}
+
+function python_import_binja_release {
+	export BINJA_PY=$BINJA_APP_RELEASE/Contents/Resources/python
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
+}
+
+function python_import_sidekick {
+	export PYTHONPATH=${PYTHONPATH}:/Users/andrewl/repos/vector35/TypeLibraryBinaries/bnml/packages
 }
 
 function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
-
-export PYTHONPATH=
-python_import_binja
 
 ###############################################################################
 # per-platform settings
@@ -78,6 +92,8 @@ if [[ $platform == 'Darwin' ]]; then
 	alias drawbot='open -a drawbot'
 	alias vlc='open -a vlc'
 	alias coqide='/Applications/CoqIDE_8.11.1.app/Contents/MacOS/coqide'
+	alias binja_plugs='pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins'
+	alias binjaplugs='binja_plugs'
 
 	# for midnight commander
 	export VIEWER='open'
@@ -219,6 +235,11 @@ notes() {
 	jotter $fpath $@
 }
 
+cards() {
+	local fpath=$HOME/fdumps/journals/cards.md
+	jotter $fpath $@
+}
+
 lists() {
 	local fpath=$HOME/fdumps/journals/lists.md
 	if [ "$2" == "" ]; then
@@ -301,5 +322,6 @@ alias less='less -m -n -g -i -J --underline-special --SILENT'
 alias more='less'
 
 alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
-
+alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
+alias binjaapi='pushd $HOME/repos/vector35/binaryninja/api'
 source ~/.bash_profile
