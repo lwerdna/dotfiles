@@ -59,17 +59,22 @@ wiki() {
 		return 0
 	fi
 
-	# assume argument is a wiki file
-	# add .md if not present
+	# non-existent filenames become new markdown files
 	fpath=$PATH_WIKI/$1
-	if [[ ! $fpath = *.md ]]; then
-		fpath="$fpath.md"
+	if ! [[ -f "$fpath" ]]; then
+		if [[ ! $fpath = *.md ]]; then
+			fpath="$fpath.md"
+		fi
 	fi
 
 	# file exists
 	if [ -f "$fpath" ]; then
 		echo "opening $fpath"
-		typora $fpath
+		if [[ $fpath = *.md ]]; then
+			typora $fpath
+		else
+			gvim $fpath
+		fi
 	# file doesnt exist, create!
 	else
 		echo "creating $fpath"
