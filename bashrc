@@ -30,6 +30,15 @@ export BINJA_APP_RELEASE="/Applications/Binary Ninja RELEASE.app"
 export BN_API_PATH=$HOME/repos/vector35/binaryninja/api
 export BN_INSTALL_DIR=$HOME/repos/vector35/binaryninja/out/binaryninja.app
 
+alias binja_built='$BINJA_APP_BUILT/Contents/MacOS/binaryninja'
+alias binja_dev='$BINJA_APP_DEV/Contents/MacOS/binaryninja'
+alias binja_release='$BINJA_APP_RELEASE/Contents/MacOS/binaryninja'
+
+alias binja_plugs='pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins'
+alias binjaplugs='binja_plugs'
+
+alias binjaapi='pushd $HOME/repos/vector35/binaryninja/api'
+
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
 #export PATH=${PATH}:${HOME}/repos/vector35/binaryninja/scc/
@@ -92,8 +101,6 @@ if [[ $platform == 'Darwin' ]]; then
 	alias drawbot='open -a drawbot'
 	alias vlc='open -a vlc'
 	alias coqide='/Applications/CoqIDE_8.11.1.app/Contents/MacOS/coqide'
-	alias binja_plugs='pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins'
-	alias binjaplugs='binja_plugs'
 
 	# for midnight commander
 	export VIEWER='open'
@@ -117,6 +124,7 @@ if [[ $platform == 'Darwin' ]]; then
 
 	# qt
 	export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
+	#export PATH=${PATH}:${HOME}/Qt/6.0.2/clang_64/bin
 
 	# LLVM
 	export PATH=$PATH:${HOME}/Downloads/clang+llvm-10.0.0-x86_64-apple-darwin/bin
@@ -277,15 +285,16 @@ snipmake() {
 	fi
 }
 
-testpy() {
-	if test -f "./test.py"; then
+gopy() {
+	if test -f "./go.py"; then
 		echo "already exists"
 	else
-		echo -e "#!/usr/bin/env python\n" > ./test.py
-		echo -e "print(\"Hello, world!\")\n" >> ./test.py
-		chmod +x ./test.py
+		echo -e "#!/usr/bin/env python\n" > ./go.py
+		echo -e "import os, sys, re\n" >> ./go.py
+		echo -e "print(\"Hello, world!\")\n" >> ./go.py
+		chmod +x ./go.py
 	fi
-	gvim + test.py
+	gvim + go.py
 }
 
 testc() {
@@ -306,8 +315,6 @@ alias todo='gvim $HOME/fdumps/workspace/todo'
 alias quickc='gvim /tmp/quick.c'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias website='open $HOME/fdumps/website/index.html'
-#alias binja='~/repos/vector35/binaryninja/ui/binaryninja.app/Contents/MacOS/binaryninja'
-alias binja='$BINJA_APP/Contents/MacOS/binaryninja'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
 alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
@@ -323,5 +330,4 @@ alias more='less'
 
 alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
-alias binjaapi='pushd $HOME/repos/vector35/binaryninja/api'
 source ~/.bash_profile
