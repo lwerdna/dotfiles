@@ -10,6 +10,8 @@
 syntax on
 set nonumber
 
+" call ~/.vim/ftplugin/<filetype>.vim when setting filetype
+filetype plugin on
 
 " search stuff
 set ignorecase
