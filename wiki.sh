@@ -1,30 +1,5 @@
 #!/bin/bash
 
-# notes:
-# https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion
-# https://spin.atomicobject.com/2016/02/14/bash-programmable-completion/
-# since `complete` is a built-in, you'd do `help complete` instead of `man complete`
-# compspec - completion specification, specified per command
-# make new compspecs with `complete <options> <cmd>`
-# list current compspecs: `complete -p`
-#
-# can specify a command/program with `-C` that, given COMP_LINE and COMP_POINT
-#   environment variables, outputs a list of completion options
-# can specify a bash function with `-F`
-
-# INPUTS:
-# command line argument:
-#   $1 is the name of the command whose arguments are being completed
-#   $2 is the word being completed
-#   $3 is the word preceeding the word being completed
-# environment variables:
-#   COMP_WORDS is array
-#   COMP_CWORD is current cursor position in COMP_WORDS
-#   COMP_LINE is current line being completed
-#   COMP_POINT is current point completion is taking place within COMP_LINE
-#   COMP_XXX is others
-# OUTPUTS:
-#   set COMP_REPLY to the possible words
 PATH_WIKI=${HOME}/fdumps/wiki
 PATH_WIKI_ASSETS=${PATH_WIKI}/assets
 
@@ -112,6 +87,31 @@ wikilog() {
 	typora $fpath
 }
 
+# notes:
+# https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion
+# https://spin.atomicobject.com/2016/02/14/bash-programmable-completion/
+# since `complete` is a built-in, you'd do `help complete` instead of `man complete`
+# compspec - completion specification, specified per command
+# make new compspecs with `complete <options> <cmd>`
+# list current compspecs: `complete -p`
+#
+# can specify a command/program with `-C` that, given COMP_LINE and COMP_POINT
+#   environment variables, outputs a list of completion options
+# can specify a bash function with `-F`
+
+# INPUTS:
+# command line argument:
+#   $1 is the name of the command whose arguments are being completed
+#   $2 is the word being completed
+#   $3 is the word preceeding the word being completed
+# environment variables:
+#   COMP_WORDS is array
+#   COMP_CWORD is current cursor position in COMP_WORDS
+#   COMP_LINE is current line being completed
+#   COMP_POINT is current point completion is taking place within COMP_LINE
+#   COMP_XXX is others
+# OUTPUTS:
+#   set COMP_REPLY to the possible words
 _GetWikiFiles()
 {
 	local cur # pointer to current completion word

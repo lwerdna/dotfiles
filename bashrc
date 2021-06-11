@@ -123,8 +123,9 @@ if [[ $platform == 'Darwin' ]]; then
 	export NDK=$NDK_R21D
 
 	# qt
-	export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
+	#export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.0.2/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
 
 	# LLVM
 	export PATH=$PATH:${HOME}/Downloads/clang+llvm-10.0.0-x86_64-apple-darwin/bin
