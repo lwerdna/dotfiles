@@ -53,6 +53,8 @@ source ~/.bashrc_private
 eval "$(pyenv init -)"
 pyenv shell 3.7.4 2.7.16
 
+export PATH=$PATH:$HOME/.pyenv/versions/3.7.4
+
 function python_import_binja_built {
 	export BINJA_PY=$BINJA_APP_BUILT/Contents/Resources/python
 	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
