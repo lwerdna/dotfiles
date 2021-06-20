@@ -27,8 +27,9 @@ export BINJA_APP_BUILT=$BINJA_BUILD/out/binaryninja.app
 export BINJA_APP_DEV="/Applications/Binary Ninja DEV.app"
 export BINJA_APP_RELEASE="/Applications/Binary Ninja RELEASE.app"
 
-export BN_API_PATH=$HOME/repos/vector35/binaryninja/api
-export BN_INSTALL_DIR=$HOME/repos/vector35/binaryninja/out/binaryninja.app
+export BN_API_PATH=$BINJA_API
+export BN_API_DIR=$BINJA_API
+export BN_INSTALL_DIR=$BINJA_APP_BUILT
 
 alias binja_built='$BINJA_APP_BUILT/Contents/MacOS/binaryninja'
 alias binja_dev='$BINJA_APP_DEV/Contents/MacOS/binaryninja'
@@ -53,6 +54,7 @@ source ~/.bashrc_private
 eval "$(pyenv init -)"
 pyenv shell 3.7.4 2.7.16
 
+# some packages install executable scripts, like pyelftools puts readelf.py here
 export PATH=$PATH:$HOME/.pyenv/versions/3.7.4
 
 function python_import_binja_built {
@@ -102,7 +104,7 @@ if [[ $platform == 'Darwin' ]]; then
 	alias geany='open -a geany'
 	alias drawbot='open -a drawbot'
 	alias vlc='open -a vlc'
-	alias coqide='/Applications/CoqIDE_8.11.1.app/Contents/MacOS/coqide'
+	alias coqide='/Applications/CoqIDE_8.13.1.app/Contents/MacOS/coqide'
 
 	# for midnight commander
 	export VIEWER='open'
