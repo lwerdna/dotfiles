@@ -31,4 +31,6 @@ install_vim:
 	ln -s -f `pwd`/vim/quickc.vim ~/.vim/quickc.vim
 	ln -s -f `pwd`/vim/python.vim ~/.vim/ftplugin/python.vim
 	ln -s -f `pwd`/vim/ftdetect/poke.vim ~/.vim/ftdetect/poke.vim
+	ln -s -f `pwd`/vim/ftdetect/coq.vim ~/.vim/ftdetect/coq.vim
 	ln -s -f `pwd`/vim/syntax/poke.vim ~/.vim/syntax/poke.vim
+	ln -s -f `pwd`/vim/syntax/coq.vim ~/.vim/syntax/coq.vim
