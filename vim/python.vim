@@ -1,1 +1,1 @@
-call UseSpaces()
+call UseTabs()

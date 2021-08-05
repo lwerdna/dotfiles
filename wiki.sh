@@ -47,6 +47,10 @@ wiki() {
 		echo "opening $fpath"
 		if [[ $fpath = *.md ]]; then
 			typora $fpath
+		elif [[ $fpath = *.v ]]; then
+			coqide $fpath
+		elif [[ $fpath = *.svg ]]; then
+			inkscape $fpath
 		else
 			gvim $fpath
 		fi

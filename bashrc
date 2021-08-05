@@ -32,6 +32,7 @@ export BN_API_DIR=$BINJA_API
 export BN_INSTALL_DIR=$BINJA_APP_BUILT
 
 alias binja_built='$BINJA_APP_BUILT/Contents/MacOS/binaryninja'
+alias binja_debug='lldb $BINJA_APP_BUILT/Contents/MacOS/binaryninja'
 alias binja_dev='$BINJA_APP_DEV/Contents/MacOS/binaryninja'
 alias binja_release='$BINJA_APP_RELEASE/Contents/MacOS/binaryninja'
 
@@ -55,7 +56,7 @@ eval "$(pyenv init -)"
 pyenv shell 3.7.4 2.7.16
 
 # some packages install executable scripts, like pyelftools puts readelf.py here
-export PATH=$PATH:$HOME/.pyenv/versions/3.7.4
+export PATH=$PATH:$HOME/.pyenv/versions/3.7.4/bin
 
 function python_import_binja_built {
 	export BINJA_PY=$BINJA_APP_BUILT/Contents/Resources/python
@@ -79,6 +80,8 @@ function python_import_sidekick {
 function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
+
+python_import_binja_built
 
 ###############################################################################
 # per-platform settings
@@ -105,7 +108,7 @@ if [[ $platform == 'Darwin' ]]; then
 	alias drawbot='open -a drawbot'
 	alias vlc='open -a vlc'
 	alias coqide='/Applications/CoqIDE_8.13.1.app/Contents/MacOS/coqide'
-
+	alias vscode='open -a Visual\ Studio\ Code'
 	# for midnight commander
 	export VIEWER='open'
 
@@ -113,7 +116,7 @@ if [[ $platform == 'Darwin' ]]; then
 	export JAVA_HOME=${HOME}/Downloads/jdk-11.0.1.jdk/Contents/Home
 	export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
 	#export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
-	alias antlr4='java -jar /usr/local/lib/antlr-4.5.1-complete.jar'
+	alias antlr4='java -jar /usr/local/lib/antlr-4.9.2-complete.jar'
 	alias grun='java org.antlr.v4.gui.TestRig'
 
 	# android
@@ -132,8 +135,9 @@ if [[ $platform == 'Darwin' ]]; then
 	export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
 
 	# LLVM
-	export PATH=$PATH:${HOME}/Downloads/clang+llvm-10.0.0-x86_64-apple-darwin/bin
-	export LLVM_INSTALL_DIR=${HOME}/Downloads/clang+llvm-10.0.0-x86_64-apple-darwin
+	export PATH=$PATH:${HOME}/libclang/12.0.0/bin
+	export LLVM_INSTALL_DIR=${HOME}/libclang
+	export LIBCLANG_PATH=${HOME}/libclang
 
 	# LLDB server
 	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
@@ -215,6 +219,7 @@ function powerpc_eabi {
 # notes, snippets, wiki
 ###############################################################################
 source ${DOTFILES}/wiki.sh
+export PATH_KB=$HOME/fdumps/wiki
 
 # first parameter ($1) is filename
 # second parameter ($2) is command
@@ -241,83 +246,56 @@ jotter() {
 	fi
 }
 
-export PATH_KB=$HOME/fdumps/wiki
-
 notes() {
 	local fpath=$HOME/fdumps/journals/notes.md
 	jotter $fpath $@
 }
 
-cards() {
-	local fpath=$HOME/fdumps/journals/cards.md
-	jotter $fpath $@
-}
-
-lists() {
-	local fpath=$HOME/fdumps/journals/lists.md
-	if [ "$2" == "" ]; then
-		jotter $fpath gvim
-	else
-		jotter $fpath $@
-	fi
-}
-
-snipper() {
-	local fpath=$1
-	if [ "$2" == "gvim" ]; then
-		gvim $fpath
-	else
-		less $fpath
-	fi
-}
-
-snipc() {
-	snipper $HOME/fdumps/workspace/snippets.c $1
-}
-snippy() {
-	wiki PythonCookbook.md
-}
-snipbash() {
-	snipper $HOME/fdumps/workspace/snippets.sh $1
-}
-
-snipmake() {
-	local fpath=$HOME/fdumps/workspace/Make.md
-	if [ "$1" == "vim" ]; then
-		gvim -c "set filetype=make" $fpath
-	else
-		less $fpath
-	fi
-}
-
 gopy() {
-	if test -f "./go.py"; then
+	local fname
+
+	if [ "$1" == "" ]; then
+		fname="./go.py"
+	else
+		fname=$1
+	fi
+	#echo "using fname $fname"
+
+	if test -f "$fname"; then
 		echo "already exists"
 	else
-		echo -e "#!/usr/bin/env python\n" > ./go.py
-		echo -e "import os, sys, re\n" >> ./go.py
-		echo -e "print(\"Hello, world!\")\n" >> ./go.py
-		chmod +x ./go.py
+		echo -e "#!/usr/bin/env python\n" > $fname
+		echo -e "import os, sys, re, pprint\n" >> $fname
+		echo -e "print(\"Hello, world!\")\n" >> $fname
+		chmod +x $fname
 	fi
-	gvim + go.py
+	gvim + $fname
 }
 
-testc() {
-	if test -f "./test.c"; then
+goc() {
+	local fname
+
+	if [ "$1" == "" ]; then
+		fname="./go.c"
+	else
+		fname=$1
+	fi
+	#echo "using fname $fname"
+
+	if test -f "$fname"; then
 		echo "already exists"
 	else
-		echo -e "#include <stdio.h>\n" > ./test.c
-		echo -e "int main(int argc, char **argv)" >> ./test.c
-		echo -e "{" >> ./test.c
-		echo -e "\tprintf(\"Hello, world!\");\n" >> ./test.c
-		echo -e "}" >> ./test.c
+		echo -e "#include <stdio.h>\n" > $fname
+		echo -e "int main(int argc, char **argv)" >> $fname
+		echo -e "{" >> $fname
+		echo -e "\tprintf(\"Hello, world!\");\n" >> $fname
+		echo -e "}" >> $fname
 	fi
-	gvim +6 test.c
+	gvim +6 $fname
 }
 
 # quick editor stuff
 alias todo='gvim $HOME/fdumps/workspace/todo'
-alias quickc='gvim /tmp/quick.c'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias website='open $HOME/fdumps/website/index.html'
 alias ghidra='$GHIDRAHOME/ghidraRun'
@@ -336,3 +314,4 @@ alias more='less'
 alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
 source ~/.bash_profile
+. "$HOME/.cargo/env"
