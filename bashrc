@@ -24,22 +24,22 @@ export BINJA_API=$BINJA_SOURCE/api
 export BINJA_BUILD=$BINJA_SOURCE/build_debug
 
 export BINJA_APP_BUILT=$BINJA_BUILD/out/binaryninja.app
-export BINJA_APP_DEV="/Applications/Binary Ninja DEV.app"
-export BINJA_APP_RELEASE="/Applications/Binary Ninja RELEASE.app"
+export BINJA_APP_DEV="/Applications/Binary\ Ninja\ DEV.app"
+export BINJA_APP_RELEASE="/Applications/Binary\ Ninja\ RELEASE.app"
 
 export BN_API_PATH=$BINJA_API
 export BN_API_DIR=$BINJA_API
 export BN_INSTALL_DIR=$BINJA_APP_BUILT
 
-alias binja_built='$BINJA_APP_BUILT/Contents/MacOS/binaryninja'
-alias binja_debug='lldb $BINJA_APP_BUILT/Contents/MacOS/binaryninja'
-alias binja_dev='$BINJA_APP_DEV/Contents/MacOS/binaryninja'
-alias binja_release='$BINJA_APP_RELEASE/Contents/MacOS/binaryninja'
+alias binja_built="$BINJA_APP_BUILT/Contents/MacOS/binaryninja"
+alias binja_debug="lldb $BINJA_APP_BUILT/Contents/MacOS/binaryninja"
+alias binja_dev="$BINJA_APP_DEV/Contents/MacOS/binaryninja"
+alias binja_release="$BINJA_APP_RELEASE/Contents/MacOS/binaryninja"
 
-alias binja_plugs='pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins'
-alias binjaplugs='binja_plugs'
+alias binja_plugs="pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins"
+alias binjaplugs="binja_plugs"
 
-alias binjaapi='pushd $HOME/repos/vector35/binaryninja/api'
+alias binjaapi="pushd $HOME/repos/vector35/binaryninja/api"
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
