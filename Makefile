@@ -29,8 +29,10 @@ install_vim:
 	ln -s -f `pwd`/vim/quickpy.vim ~/.vim/quickpy.vim
 	ln -s -f `pwd`/vim/quickpng.vim ~/.vim/quickpng.vim
 	ln -s -f `pwd`/vim/quickc.vim ~/.vim/quickc.vim
-	ln -s -f `pwd`/vim/python.vim ~/.vim/ftplugin/python.vim
+	ln -s -f `pwd`/vim/ftplugin/python.vim ~/.vim/ftplugin/python.vim
 	ln -s -f `pwd`/vim/ftdetect/poke.vim ~/.vim/ftdetect/poke.vim
 	ln -s -f `pwd`/vim/ftdetect/coq.vim ~/.vim/ftdetect/coq.vim
+	ln -s -f `pwd`/vim/ftdetect/tatsu.vim ~/.vim/ftdetect/tatsu.vim
 	ln -s -f `pwd`/vim/syntax/poke.vim ~/.vim/syntax/poke.vim
 	ln -s -f `pwd`/vim/syntax/coq.vim ~/.vim/syntax/coq.vim
+	ln -s -f `pwd`/vim/syntax/tatsu.vim ~/.vim/syntax/tatsu.vim
