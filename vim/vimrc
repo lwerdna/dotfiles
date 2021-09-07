@@ -215,6 +215,7 @@ endfunction
 
 autocmd FileType python map <buffer> <leader>r :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 autocmd FileType python imap <buffer> <leader>r <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
+autocmd FileType pie imap <buffer> <leader>r <esc>:w<CR>:exec '!racket' shellescape(@%, 1)<CR>
 
 "autocmd FileType C map <buffer> <leader>r :w<CR>echo 'compiling'<CR>:exec '!gcc' shellescape(@%, 1)<CR>echo 'running'<CR>:exec '!./a.out'<CR>
 "autocmd FileType C imap <buffer> <leader>r <esc>:w<CR>:exec '!gcc' shellescape(@%, 1)<CR>:exec '!./a.out'<CR>

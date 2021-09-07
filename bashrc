@@ -21,20 +21,22 @@ export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 # binary ninja
 export BINJA_SOURCE=$HOME/repos/vector35/binaryninja
 export BINJA_API=$BINJA_SOURCE/api
-export BINJA_BUILD=$BINJA_SOURCE/build_debug
+export BINJA_BUILD_DEBUG=$BINJA_SOURCE/build_debug
+export BINJA_BUILD_RELEASE=$BINJA_SOURCE/build_release
 
-export BINJA_APP_BUILT=$BINJA_BUILD/out/binaryninja.app
+export BINJA_APP_BUILT_DEBUG=$BINJA_BUILD_DEBUG/out/binaryninja.app
+export BINJA_APP_BUILT_RELEASE=$BINJA_BUILD_RELEASE/out/binaryninja.app
 export BINJA_APP_DEV="/Applications/Binary\ Ninja\ DEV.app"
 export BINJA_APP_RELEASE="/Applications/Binary\ Ninja\ RELEASE.app"
 
 export BN_API_PATH=$BINJA_API
 export BN_API_DIR=$BINJA_API
-export BN_INSTALL_DIR=$BINJA_APP_BUILT
+export BN_INSTALL_DIR=$BINJA_APP_RELEASE
 
-alias binja_built="$BINJA_APP_BUILT/Contents/MacOS/binaryninja"
-alias binja_debug="lldb $BINJA_APP_BUILT/Contents/MacOS/binaryninja"
+alias binja_built_debug="$BINJA_APP_BUILT_DEBUG/Contents/MacOS/binaryninja"
+alias binja_built_release="$BINJA_APP_BUILT_RELEASE/Contents/MacOS/binaryninja"
+alias binja_debug="lldb $BINJA_APP_RELEASE/Contents/MacOS/binaryninja"
 alias binja_dev="$BINJA_APP_DEV/Contents/MacOS/binaryninja"
-alias binja_release="$BINJA_APP_RELEASE/Contents/MacOS/binaryninja"
 
 alias binja_plugs="pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins"
 alias binjaplugs="binja_plugs"
@@ -58,8 +60,18 @@ pyenv shell 3.7.4 2.7.16
 # some packages install executable scripts, like pyelftools puts readelf.py here
 export PATH=$PATH:$HOME/.pyenv/versions/3.7.4/bin
 
-function python_import_binja_built {
-	export BINJA_PY=$BINJA_APP_BUILT/Contents/Resources/python
+function python_import_binja_clear {
+	export BINJA_PY=
+	export PYTHONPATH=
+}
+
+function python_import_binja_built_debug {
+	export BINJA_PY=$BINJA_APP_BUILT_DEBUG/Contents/Resources/python
+	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
+}
+
+function python_import_binja_built_release {
+	export BINJA_PY=$BINJA_APP_BUILT_RELEASE/Contents/Resources/python
 	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
 }
 
@@ -81,7 +93,7 @@ function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
 
-python_import_binja_built
+python_import_binja_built_debug
 
 ###############################################################################
 # per-platform settings
