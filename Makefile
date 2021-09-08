@@ -3,6 +3,9 @@ all:
 
 .PHONY: install_bash install_gdb install_gdb_x64 install_gdb_arm install_gdb_aarch64 install_vim 
 
+install_misc:
+	if [ ! -d "${HOME}/bin" ]; then mkdir ${HOME}/bin; fi
+	ln -s -f `pwd`/semantichistory.py ${HOME}/bin
 install_bash:
 	ln -s -f `pwd`/bashrc ~/.bashrc
 
