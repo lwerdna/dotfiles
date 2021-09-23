@@ -18,37 +18,62 @@ export PATH_AUTILS_C=${PATH_AUTILS}/c
 export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
-# binary ninja
-export BINJA_SOURCE=$HOME/repos/vector35/binaryninja
-export BINJA_API=$BINJA_SOURCE/api
-export BINJA_BUILD_DEBUG=$BINJA_SOURCE/build_debug
-export BINJA_BUILD_RELEASE=$BINJA_SOURCE/build_release
+# local private (non github) stuff
+source ~/.bashrc_private
 
-export BINJA_APP_BUILT_DEBUG=$BINJA_BUILD_DEBUG/out/binaryninja.app
-export BINJA_APP_BUILT_RELEASE=$BINJA_BUILD_RELEASE/out/binaryninja.app
-export BINJA_APP_DEV="/Applications/Binary\ Ninja\ DEV.app"
-export BINJA_APP_RELEASE="/Applications/Binary\ Ninja\ RELEASE.app"
+###############################################################################
+# binaryninja
+###############################################################################
 
-export BN_API_PATH=$BINJA_API
-export BN_API_DIR=$BINJA_API
-export BN_INSTALL_DIR=$BINJA_APP_RELEASE
+export BN_SOURCE=$HOME/repos/vector35/binaryninja
 
-alias binja_built_debug="$BINJA_APP_BUILT_DEBUG/Contents/MacOS/binaryninja"
-alias binja_built_release="$BINJA_APP_BUILT_RELEASE/Contents/MacOS/binaryninja"
-alias binja_debug="lldb $BINJA_APP_RELEASE/Contents/MacOS/binaryninja"
-alias binja_dev="$BINJA_APP_DEV/Contents/MacOS/binaryninja"
+function bn_common {
+	export PYTHONPATH=${PYTHONPATH}:${BN_INSTALL_DIR}/Contents/Resources/python
 
-alias binja_plugs="pushd $HOME/Library/Application\ Support/Binary\ Ninja/plugins"
-alias binjaplugs="binja_plugs"
+	# for, eg: Makefiles to specify an include path into API
+	export BN_API=$BN_SOURCE/api
 
-alias binjaapi="pushd $HOME/repos/vector35/binaryninja/api"
+	# for, eg: Makefiles that compile plugins specify an install target
+	export BN_PLUGINS="$HOME/Library/Application Support/Binary Ninja/plugins"
+
+	# for, eg: Makefiles for plugins to link against the API lib
+	export BN_LIBBINARYNINJACORE=$BN_INSTALL_DIR/Contents/MacOS/libbinaryninjacore.dylib
+	export BN_LIBBINARYNINJAAPI=$BN_API/build_debug/out/libbinaryninjaapi.a
+
+	alias binja="$BN_INSTALL_DIR/Contents/MacOS/binaryninja"
+	alias binja_lldb="lldb $BN_INSTALL_DIR/Contents/MacOS/binaryninja"
+}
+
+function bn_select_debug {
+	echo Binary Ninja: selecting the source compiled [DEBUG]
+	export BN_INSTALL_DIR=$BN_SOURCE/build_debug/out/binaryninja.app
+	bn_common
+}
+
+function bn_select_release {
+	echo Binary Ninja: selecting the source compiled [RELEASE]
+	export BN_INSTALL_DIR=$BN_SOURCE/build_release/out/binaryninja.app
+	bn_common
+}
+
+function bn_select_installed_dev {
+	echo Binary Ninja: selecting system-installed DEV
+	export BN_INSTALL_DIR="/Applications/Binary Ninja DEV.app"
+	bn_common
+}
+
+function bn_select_installed_stable {
+	echo Binary Ninja: selecting system-installed STABLE
+	export BN_INSTALL_DIR="/Applications/Binary Ninja STABLE.app"
+	bn_common
+}
+
+# default is the built debug one
+bn_select_debug
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
 #export PATH=${PATH}:${HOME}/repos/vector35/binaryninja/scc/
-
-# local private (non github) stuff
-source ~/.bashrc_private
 
 ###############################################################################
 # python
@@ -60,40 +85,13 @@ pyenv shell 3.7.4 2.7.16
 # some packages install executable scripts, like pyelftools puts readelf.py here
 export PATH=$PATH:$HOME/.pyenv/versions/3.7.4/bin
 
-function python_import_binja_clear {
-	export BINJA_PY=
-	export PYTHONPATH=
-}
-
-function python_import_binja_built_debug {
-	export BINJA_PY=$BINJA_APP_BUILT_DEBUG/Contents/Resources/python
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-}
-
-function python_import_binja_built_release {
-	export BINJA_PY=$BINJA_APP_BUILT_RELEASE/Contents/Resources/python
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-}
-
-function python_import_binja_dev {
-	export BINJA_PY=$BINJA_APP_DEV/Contents/Resources/python
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-}
-
-function python_import_binja_release {
-	export BINJA_PY=$BINJA_APP_RELEASE/Contents/Resources/python
-	export PYTHONPATH=${PYTHONPATH}:${BINJA_PY}
-}
-
 function python_import_sidekick {
-	export PYTHONPATH=${PYTHONPATH}:/Users/andrewl/repos/vector35/TypeLibraryBinaries/bnml/packages
+	export PYTHONPATH=${PYTHONPATH}:$HOME/repos/vector35/TypeLibraryBinaries/bnml/packages
 }
 
 function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
-
-python_import_binja_built_debug
 
 ###############################################################################
 # per-platform settings
@@ -246,7 +244,7 @@ jotter() {
 	elif [ "$text" == "vim" ]; then
 		vim + $fpath
 	elif [ "$text" == "typora" ]; then
-		open -a typora $fpath	
+		open -a typora $fpath
 	elif [ "$text" == "date" ]; then
 		echo '' >> $fpath
 		echo '# '`date +"%Y-%m-%d %T %A"` >> $fpath
