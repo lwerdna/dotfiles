@@ -1,4 +1,5 @@
 echo "my bashrc executing..."
+
 export PATH=
 export PATH=$PATH:/bin
 export PATH=$PATH:/usr/bin
@@ -31,14 +32,14 @@ function bn_common {
 	export PYTHONPATH=${PYTHONPATH}:${BN_INSTALL_DIR}/Contents/Resources/python
 
 	# for, eg: Makefiles to specify an include path into API
-	export BN_API=$BN_SOURCE/api
+	export BN_API_PATH=$BN_SOURCE/api
 
 	# for, eg: Makefiles that compile plugins specify an install target
 	export BN_PLUGINS="$HOME/Library/Application Support/Binary Ninja/plugins"
 
 	# for, eg: Makefiles for plugins to link against the API lib
 	export BN_LIBBINARYNINJACORE=$BN_INSTALL_DIR/Contents/MacOS/libbinaryninjacore.dylib
-	export BN_LIBBINARYNINJAAPI=$BN_API/build_debug/out/libbinaryninjaapi.a
+	export BN_LIBBINARYNINJAAPI=$BN_API_PATH/build_debug/out/libbinaryninjaapi.a
 
 	alias binja="$BN_INSTALL_DIR/Contents/MacOS/binaryninja"
 	alias binja_lldb="lldb $BN_INSTALL_DIR/Contents/MacOS/binaryninja"
@@ -70,6 +71,8 @@ function bn_select_installed_stable {
 
 # default is the built debug one
 bn_select_debug
+
+echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
@@ -261,6 +264,11 @@ notes() {
 	jotter $fpath $@
 }
 
+website() {
+	local fpath=$HOME/fdumps/website/index.md
+	gvim $fpath
+}
+
 gopy() {
 	local fname
 
@@ -307,7 +315,6 @@ goc() {
 # quick editor stuff
 alias todo='gvim $HOME/fdumps/workspace/todo'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
-alias website='open $HOME/fdumps/website/index.html'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
 alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
