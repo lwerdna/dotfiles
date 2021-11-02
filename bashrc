@@ -8,6 +8,7 @@ export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/repos/lwerdna/workbench
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
@@ -69,8 +70,28 @@ function bn_select_installed_stable {
 	bn_common
 }
 
-# default is the built debug one
-bn_select_debug
+function bn_select_build {
+	echo Binary Ninja: selecting build environment
+	unset PYTHONPATH
+	bn_select_release
+	export BN_DISABLE_USER_SETTINGS=1
+	export BN_DISABLE_USER_PLUGINS=1
+	export BN_DISABLE_REPOSITORY_PLUGINS=1
+	comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
+}
+
+function bn_unselect_build {
+	echo Binary Ninja: unselecting build environment
+	export PYTHONPATH
+	bn_select_release
+	unset BN_DISABLE_USER_SETTINGS
+	unset BN_DISABLE_USER_PLUGINS
+	unset BN_DISABLE_REPOSITORY_PLUGINS
+	uncomment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
+}
+
+# release is the built debug one
+bn_select_release
 
 echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 
@@ -82,7 +103,7 @@ echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 # python
 ###############################################################################
 
-eval "$(pyenv init -)"
+eval "$(pyenv init --path)"
 pyenv shell 3.7.4 2.7.16
 
 # some packages install executable scripts, like pyelftools puts readelf.py here
@@ -155,7 +176,7 @@ if [[ $platform == 'Darwin' ]]; then
 	# LLDB server
 	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
 	# SML NJ
-	export PATH=$PATH:/usr/local/smlnj/bin
+	#export PATH=$PATH:/usr/local/smlnj/bin
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
@@ -175,10 +196,10 @@ elif [[ $platform == 'Linux' ]]; then
 fi
 
 # platform-generals that depended on the platform-specifics
-export PATH=${PATH}:${ANDROID_SDK}/tools
-export PATH=${PATH}:${ANDROID_SDK}/tools/bin
-export PATH=${PATH}:${ANDROID_SDK}/platform-tools-ADB39
-export PATH=${PATH}:${ANDROID_SDK}/build-tools/28.0.1
+#export PATH=${PATH}:${ANDROID_SDK}/tools
+#export PATH=${PATH}:${ANDROID_SDK}/tools/bin
+#export PATH=${PATH}:${ANDROID_SDK}/platform-tools-ADB39
+#export PATH=${PATH}:${ANDROID_SDK}/build-tools/28.0.1
 
 ###############################################################################
 # cross compiler stuff
@@ -330,5 +351,5 @@ alias more='less'
 
 alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
+
 source ~/.bash_profile
-. "$HOME/.cargo/env"
