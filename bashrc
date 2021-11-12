@@ -13,6 +13,7 @@ export PATH=$PATH:$HOME/repos/lwerdna/workbench
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
 export GHIDRAHOME=${HOME}/Downloads/ghidra_9.0.4
+export HOMEBREW_NO_AUTO_UPDATE=1
 
 # ALIB various points
 export PATH_AUTILS=${HOME}/repos/lwerdna/autils
@@ -77,6 +78,7 @@ function bn_select_build {
 	export BN_DISABLE_USER_SETTINGS=1
 	export BN_DISABLE_USER_PLUGINS=1
 	export BN_DISABLE_REPOSITORY_PLUGINS=1
+	export LIBCLANG_PATH=/Users/andrewl/libclang/12.0.0/lib
 	comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
 }
 
