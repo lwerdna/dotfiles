@@ -43,4 +43,6 @@ install_vim:
 	ln -s -f `pwd`/vim/ftplugin/pie.vim ~/.vim/ftplugin/pie.vim
 	ln -s -f `pwd`/vim/syntax/pie.vim ~/.vim/syntax/pie.vim
 	ln -s -f `pwd`/vim/ftdetect/prolog.vim ~/.vim/ftdetect/prolog.vim
+	ln -s -f `pwd`/vim/ftdetect/llvm.vim ~/.vim/ftdetect/llvm.vim
+	ln -s -f `pwd`/vim/syntax/llvm.vim ~/.vim/syntax/llvm.vim
 
