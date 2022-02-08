@@ -29,7 +29,9 @@ source ~/.bashrc_private
 ###############################################################################
 
 export BN_SOURCE=$HOME/repos/vector35/binaryninja
+export BN_BNTLS=$BN_SOURCE/typelib
 
+# relies on BN_INSTALL_DIR being set
 function bn_common {
 	export PYTHONPATH=${PYTHONPATH}:${BN_INSTALL_DIR}/Contents/Resources/python
 
@@ -41,7 +43,6 @@ function bn_common {
 
 	# for, eg: Makefiles for plugins to link against the API lib
 	export BN_LIBBINARYNINJACORE=$BN_INSTALL_DIR/Contents/MacOS/libbinaryninjacore.dylib
-	export BN_LIBBINARYNINJAAPI=$BN_API_PATH/build_debug/out/libbinaryninjaapi.a
 
 	alias binja="$BN_INSTALL_DIR/Contents/MacOS/binaryninja"
 	alias binja_lldb="lldb $BN_INSTALL_DIR/Contents/MacOS/binaryninja"
@@ -51,17 +52,25 @@ function bn_select_debug {
 	echo Binary Ninja: selecting the source compiled [DEBUG]
 	export BN_INSTALL_DIR=$BN_SOURCE/build_debug/out/binaryninja.app
 	bn_common
+	export BN_LIBBINARYNINJAAPI=$BN_API_PATH/build_debug/out/libbinaryninjaapi.a
 }
 
 function bn_select_release {
 	echo Binary Ninja: selecting the source compiled [RELEASE]
 	export BN_INSTALL_DIR=$BN_SOURCE/build_release/out/binaryninja.app
 	bn_common
+	export BN_LIBBINARYNINJAAPI=$BN_API_PATH/build_release/out/libbinaryninjaapi.a
 }
 
 function bn_select_installed_dev {
 	echo Binary Ninja: selecting system-installed DEV
 	export BN_INSTALL_DIR="/Applications/Binary Ninja DEV.app"
+	bn_common
+}
+
+function bn_select_installed_23 {
+	echo Binary Ninja: selecting system-installed 2.3
+	export BN_INSTALL_DIR="/Applications/Binary Ninja 2.3 2660.app"
 	bn_common
 }
 
@@ -145,6 +154,7 @@ if [[ $platform == 'Darwin' ]]; then
 	alias vlc='open -a vlc'
 	alias coqide='/Applications/CoqIDE_8.13.1.app/Contents/MacOS/coqide'
 	alias vscode='open -a Visual\ Studio\ Code'
+	alias arduino='open -a Arduino'
 	# for midnight commander
 	export VIEWER='open'
 
@@ -292,6 +302,25 @@ website() {
 	gvim $fpath
 }
 
+yesterday() {
+	local date=`date -v-1d +"%Y-%m-%d"`
+	local fpath="$HOME/fdumps/journals/$date.md"
+	open -a macvim $fpath
+}
+
+today() {
+	local fpath=$HOME/fdumps/journals
+	local date=`date +"%Y-%m-%d"`
+	local source="$fpath/daily_template.md"
+	local destination="$fpath/$date.md"
+	if [ ! -f $destination ]; then
+		echo "creating $destination";
+		cp $source $destination;
+	fi
+	echo "opening $destination";
+	open -a macvim $destination;
+}
+
 gopy() {
 	local fname
 
@@ -305,9 +334,7 @@ gopy() {
 	if test -f "$fname"; then
 		echo "already exists"
 	else
-		echo -e "#!/usr/bin/env python\n" > $fname
-		echo -e "import os, sys, re, pprint\n" >> $fname
-		echo -e "print(\"Hello, world!\")\n" >> $fname
+		cp $HOME/fdumps/workspace/gopy-template.py $fname
 		chmod +x $fname
 	fi
 	gvim + $fname
@@ -353,5 +380,8 @@ alias more='less'
 
 alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
+
+alias graph='dot -Tpng /tmp/tmp.dot -o /tmp/tmp.png && open /tmp/tmp.png'
+alias graphsvg='dot -Tsvg /tmp/tmp.dot -o /tmp/tmp.svg && firefox /tmp/tmp.svg'
 
 source ~/.bash_profile
