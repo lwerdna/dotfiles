@@ -45,4 +45,6 @@ install_vim:
 	ln -s -f `pwd`/vim/ftdetect/prolog.vim ~/.vim/ftdetect/prolog.vim
 	ln -s -f `pwd`/vim/ftdetect/llvm.vim ~/.vim/ftdetect/llvm.vim
 	ln -s -f `pwd`/vim/syntax/llvm.vim ~/.vim/syntax/llvm.vim
-
+	ln -s -f `pwd`/vim/ftdetect/smt2.vim ~/.vim/ftdetect/smt2.vim
+	ln -s -f `pwd`/vim/ftplugin/smt2.vim ~/.vim/ftplugin/smt2.vim
+	ln -s -f `pwd`/vim/syntax/smt2.vim ~/.vim/syntax/smt2.vim
