@@ -65,11 +65,13 @@ set tags=./tags,./../tags,./../../tags,./../../../tags,./../../../../tags,./../.
 set statusline=%f
 set statusline+=\ 
 set statusline+=[TYPE=%Y]
-set statusline+=\   
+set statusline+=\ 
 set statusline+=[POS=%04l,%04v]	" current line, virtual col number
 set statusline+=[%p%%]
 set statusline+=\ 
 set statusline+=[LEN=%L]		" total lines
+set statusline+=\ 
+set statusline+=[FPOS=%o]
 set laststatus=2 
 set fillchars+=vert:\ 
 " TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
