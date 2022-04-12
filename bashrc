@@ -1,5 +1,8 @@
 echo "my bashrc executing..."
 
+# case insensitive glob, ls
+shopt -s nocaseglob
+
 export PATH=
 export PATH=$PATH:/bin
 export PATH=$PATH:/usr/bin
@@ -50,16 +53,18 @@ function bn_common {
 
 function bn_select_debug {
 	echo Binary Ninja: selecting the source compiled [DEBUG]
-	export BN_INSTALL_DIR=$BN_SOURCE/build_debug/out/binaryninja.app
+	export BN_BUILT_DIR=$BN_SOURCE/build_debug
+	export BN_INSTALL_DIR=$BN_BUILT_DIR/out/binaryninja.app
 	bn_common
-	export BN_LIBBINARYNINJAAPI=$BN_API_PATH/build_debug/out/libbinaryninjaapi.a
+	export BN_LIBBINARYNINJAAPI=$BN_BUILT_DIR/api/out/libbinaryninjaapi.a
 }
 
 function bn_select_release {
 	echo Binary Ninja: selecting the source compiled [RELEASE]
-	export BN_INSTALL_DIR=$BN_SOURCE/build_release/out/binaryninja.app
+	export BN_BUILT_DIR=$BN_SOURCE/build_release
+	export BN_INSTALL_DIR=$BN_BUILT_DIR/out/binaryninja.app
 	bn_common
-	export BN_LIBBINARYNINJAAPI=$BN_API_PATH/build_release/out/libbinaryninjaapi.a
+	export BN_LIBBINARYNINJAAPI=$BN_BUILT_DIR/api/out/libbinaryninjaapi.a
 }
 
 function bn_select_installed_dev {
@@ -319,6 +324,25 @@ today() {
 	fi
 	echo "opening $destination";
 	open -a macvim $destination;
+}
+
+work() {
+	local date
+	local space
+
+	if [ ! "$1" == "" ]; then
+		date=$1
+	else
+		date=`date +"%Y-%m-%d"`
+	fi
+
+	space="$HOME/fdumps/heap/$date"
+
+	if [ ! -d $space ]; then
+		echo "creating $space";
+		mkdir $space;
+	fi
+	pushd $space;
 }
 
 gopy() {

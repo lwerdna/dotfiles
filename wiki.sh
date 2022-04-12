@@ -61,7 +61,7 @@ wiki() {
 #		touch $fpath
 #		echo $1 >> $fpath
 #		echo '' >> $fpath
-#		echo '<div style="position:absolute; background:lightgrey; width:100%">Posted' `gdate --iso-8601`'</div>' >> $fpath
+#		echo '<div style="background:lightgrey; width:100%">Posted' `gdate --iso-8601`'</div>' >> $fpath
 #		echo '' >> $fpath
 #		typora $fpath
 	fi
@@ -86,7 +86,7 @@ wikilog() {
 	fi
 
 	echo '' >> $fpath
-	echo '<div style="position:absolute; background:lightgrey; width:100%">Posted' `gdate --iso-8601`'</div>' >> $fpath
+	echo '<div style="background:lightgrey; width:100%">Posted' `gdate --iso-8601`'</div>' >> $fpath
 	echo '' >> $fpath
 
 	typora $fpath

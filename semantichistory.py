@@ -2,6 +2,10 @@
 
 # this is meant to be a "coprocess" for "semantic history" in iTerm2 settings
 # in plain English, it returns a string the shell should execute when you cmd+click on a file or path
+#
+# NOTE: This evidently works only on "naturally" occuring paths, those that are straightforward printed
+# from the output of commands like ls. Purposely-printed links/URLs are handled differently.
+
 import os, sys
 
 logging = False
