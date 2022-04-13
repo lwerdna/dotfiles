@@ -92,7 +92,7 @@ function bn_select_build {
 	export BN_DISABLE_USER_SETTINGS=1
 	export BN_DISABLE_USER_PLUGINS=1
 	export BN_DISABLE_REPOSITORY_PLUGINS=1
-	export LIBCLANG_PATH=/Users/andrewl/libclang/12.0.0/lib
+	export LIBCLANG_PATH=/Users/andrewl/libclang/14.0.0/lib
 	comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
 }
 
@@ -132,6 +132,13 @@ function python_import_sidekick {
 function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
+
+###############################################################################
+# rust
+###############################################################################
+
+#export PATH=${PATH}:${HOME}/.cargo/bin
+source $HOME/.cargo/env
 
 ###############################################################################
 # per-platform settings
@@ -183,10 +190,11 @@ if [[ $platform == 'Darwin' ]]; then
 	# qt
 	#export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.0.2/clang_64/bin
-	export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
+	#export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt/6.2.4/clang_64/bin
 
 	# LLVM
-	export PATH=$PATH:${HOME}/libclang/12.0.0/bin
+	export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 	export LLVM_INSTALL_DIR=${HOME}/libclang
 	export LIBCLANG_PATH=${HOME}/libclang
 
@@ -326,23 +334,48 @@ today() {
 	open -a macvim $destination;
 }
 
-work() {
-	local date
-	local space
+function create_dir_verbose()
+{
+	if [ ! -d $1 ]; then
+		echo "creating $1";
+		mkdir $1;
+	fi
+}
 
+function cdlog()
+{
+	local date PARTS YEAR MONTH DAY
+
+	# default to today, if date not given
 	if [ ! "$1" == "" ]; then
 		date=$1
 	else
 		date=`date +"%Y-%m-%d"`
 	fi
 
-	space="$HOME/fdumps/heap/$date"
-
-	if [ ! -d $space ]; then
-		echo "creating $space";
-		mkdir $space;
+	# sanitize input
+	if [[ ! "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+		echo "malformed date: $1"
+		return -1
 	fi
-	pushd $space;
+
+	# apparently $(...) gets the output of a command
+	PARTS=$(echo $date | tr "-" " ")
+
+	# (...) makes it into an array, splitting on internal field separator (IFS)
+	# which defaults to space
+	PARTS=($PARTS)
+
+	# write
+	YEAR=${PARTS[0]}
+	MONTH=${PARTS[1]}
+	DAY=${PARTS[2]}
+
+	create_dir_verbose "$HOME/fdumps/heap/$YEAR"
+	create_dir_verbose "$HOME/fdumps/heap/$YEAR/$MONTH"
+	create_dir_verbose "$HOME/fdumps/heap/$YEAR/$MONTH/$DAY"
+
+	pushd "$HOME/fdumps/heap/$YEAR/$MONTH/$DAY"
 }
 
 gopy() {
@@ -409,3 +442,4 @@ alias graph='dot -Tpng /tmp/tmp.dot -o /tmp/tmp.png && open /tmp/tmp.png'
 alias graphsvg='dot -Tsvg /tmp/tmp.dot -o /tmp/tmp.svg && firefox /tmp/tmp.svg'
 
 source ~/.bash_profile
+. "$HOME/.cargo/env"
