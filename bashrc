@@ -191,12 +191,13 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.0.2/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
-	export PATH=${PATH}:${HOME}/Qt/6.2.4/clang_64/bin
+
+	export PATH=${PATH}:${HOME}/Qt/6.3.0/clang_64/bin
 
 	# LLVM
 	export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 	export LLVM_INSTALL_DIR=${HOME}/libclang
-	export LIBCLANG_PATH=${HOME}/libclang
+	export LIBCLANG_PATH=${HOME}/libclang/14.0.0
 
 	# LLDB server
 	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
@@ -440,6 +441,8 @@ alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
 
 alias graph='dot -Tpng /tmp/tmp.dot -o /tmp/tmp.png && open /tmp/tmp.png'
 alias graphsvg='dot -Tsvg /tmp/tmp.dot -o /tmp/tmp.svg && firefox /tmp/tmp.svg'
+
+alias server='python -m http.server'
 
 source ~/.bash_profile
 . "$HOME/.cargo/env"

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 # this is meant to be a "coprocess" for "semantic history" in iTerm2 settings
 # in plain English, it returns a string the shell should execute when you cmd+click on a file or path
@@ -29,7 +29,10 @@ cmd = 'default'
 if os.path.isdir(path):
     cmd = 'pushd %s' % path.replace(' ', '\\ ')
 elif os.path.isfile(path):
-    cmd = 'open %s' % path.replace(' ', '\\ ')
+    if path.endswith('.url'):
+        cmd = 'firefox %s' % path.replace(' ', '\\ ')
+    else:
+        cmd = 'open %s' % path.replace(' ', '\\ ')
 else:
     raise Exception('do not know how to handle: %s' % path)
 

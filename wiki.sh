@@ -67,6 +67,16 @@ wiki() {
 	fi
 }
 
+wikicheckpoint() {
+	git add *.md
+	git add --update
+	git commit -m "update"
+}
+
+wikicp() {
+	wikicheckpoint
+}
+
 # same as wiki, but appends a "posted at..." message with current date
 wikilog() {
 	local fpath
