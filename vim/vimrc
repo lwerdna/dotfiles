@@ -215,6 +215,10 @@ endfunction
 " leader-r to write and run current program
 " nnoremap <leader>r :w<enter>:!%:p<enter>
 
+" encrypt/decrypt shit
+xnoremap <leader>encrypt !gpg --batch --symmetric --armor --input - --output - --passphrase-file /tmp/passphrase.txt<cr><cr>
+xnoremap <leader>decrypt !gpg --quiet --batch --decrypt --input - --output - --passphrase-file /tmp/passphrase.txt<cr><cr>
+
 autocmd FileType python map <buffer> <leader>r :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 autocmd FileType python imap <buffer> <leader>r <esc>:w<CR>:exec '!python3' shellescape(@%, 1)<CR>
 autocmd FileType pie imap <buffer> <leader>r <esc>:w<CR>:exec '!racket' shellescape(@%, 1)<CR>
@@ -227,4 +231,5 @@ autocmd FileType markdown nmap <buffer> <leader>t :exe ':silent !open -a typora 
 autocmd FileType C nmap <leader>r :w <bar> exec '!gcc '.shellescape('%').' -o '.shellescape('%:r').' && ./'.shellescape('%:r')<CR>
 
 "nnoremap <leader>r :w<enter>:make<enter>
+
 
