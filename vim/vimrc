@@ -76,6 +76,9 @@ set laststatus=2
 set fillchars+=vert:\ 
 " TIP `set guifont=*` to bring up selector, then `set guifont` to see what you selected
 
+" let # be a word character
+set iskeyword=@,48-57,_,192-255,#
+
 "------------------------------------------------------------------------------
 " OS specific stuff
 "------------------------------------------------------------------------------
