@@ -156,6 +156,9 @@ set nofoldenable
 " custom mappings
 "------------------------------------------------------------------------------
 
+" start iterm2 in current directory
+:nnoremap <leader>t :!osascript $HOME/repos/lwerdna/dotfiles/applescript/iterm2-new-window.scpt %:p:h<cr><cr>
+
 " fast edit .vimrc
 :nnoremap <leader>ev :vsplit $MYVIMRC<cr>:echo "editing" $MYVIMRC<cr>
 :nnoremap <leader>sv :source $MYVIMRC<cr>:echo "sourcing" $MYVIMRC<cr>
