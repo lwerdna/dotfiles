@@ -25,7 +25,7 @@ export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
 # local private (non github) stuff
-source ~/.bashrc_private
+source ~/fdumps/.bashrc_private
 
 ###############################################################################
 # binaryninja
@@ -36,7 +36,12 @@ export BN_BNTLS=$BN_SOURCE/typelib
 
 # relies on BN_INSTALL_DIR being set
 function bn_common {
+	unset BN_DISABLE_USER_SETTINGS
+	unset BN_DISABLE_USER_PLUGINS
+	unset BN_DISABLE_REPOSITORY_PLUGINS
+
 	export PYTHONPATH=${PYTHONPATH}:${BN_INSTALL_DIR}/Contents/Resources/python
+	export PYTHONPATH=${PYTHONPATH}:${HOME}/Qt/6.3.1/clang_64/pyside/site-packages
 
 	# for, eg: Makefiles to specify an include path into API
 	export BN_API_PATH=$BN_SOURCE/api
@@ -93,7 +98,7 @@ function bn_select_build {
 	export BN_DISABLE_USER_PLUGINS=1
 	export BN_DISABLE_REPOSITORY_PLUGINS=1
 	export LIBCLANG_PATH=/Users/andrewl/libclang/14.0.0/lib
-	comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
+	#comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
 }
 
 function bn_unselect_build {
@@ -103,7 +108,7 @@ function bn_unselect_build {
 	unset BN_DISABLE_USER_SETTINGS
 	unset BN_DISABLE_USER_PLUGINS
 	unset BN_DISABLE_REPOSITORY_PLUGINS
-	uncomment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
+	#uncomment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
 }
 
 # release is the built debug one
@@ -120,10 +125,10 @@ echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 ###############################################################################
 
 eval "$(pyenv init --path)"
-pyenv shell 3.7.4 2.7.16
+pyenv shell 3.10.0 2.7.16
 
 # some packages install executable scripts, like pyelftools puts readelf.py here
-export PATH=$PATH:$HOME/.pyenv/versions/3.7.4/bin
+export PATH=$PATH:$HOME/.pyenv/versions/3.10.0/bin
 
 function python_import_sidekick {
 	export PYTHONPATH=${PYTHONPATH}:$HOME/repos/vector35/TypeLibraryBinaries/bnml/packages
@@ -179,25 +184,26 @@ if [[ $platform == 'Darwin' ]]; then
 
 	# android
 	export ANDROID_SDK=${HOME}/Library/Android/sdk
-	export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
-	export NDK_R10E=${HOME}/android-ndk-r10e
-	export NDK_R14B=${HOME}/android-ndk-r14b
-	export NDK_R15C=${HOME}/android-ndk-r15c
-	export NDK_R17C=${HOME}/android-ndk-r17c
-	export NDK_R21D=${HOME}/android-ndk-r21d-built
+	#export NDK_R10C=/usr/local/Cellar/android-ndk-r10c/r10c
+	#export NDK_R10E=${HOME}/android-ndk-r10e
+	#export NDK_R14B=${HOME}/android-ndk-r14b
+	#export NDK_R15C=${HOME}/android-ndk-r15c
+	#export NDK_R17C=${HOME}/android-ndk-r17c
+	#export NDK_R21D=${HOME}/android-ndk-r21d-built
+	export NDK_R21D=${HOME}/android-ndk-r21d
 	export NDK=$NDK_R21D
 
 	# qt
 	#export PATH=${PATH}:${HOME}/Qt/5.15.0/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.0.2/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
-
-	export PATH=${PATH}:${HOME}/Qt/6.3.0/clang_64/bin
+	#export PATH=${PATH}:${HOME}/Qt/6.3.0/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt/6.3.1/clang_64/bin
 
 	# LLVM
-	export PATH=$PATH:${HOME}/libclang/14.0.0/bin
-	export LLVM_INSTALL_DIR=${HOME}/libclang
-	export LIBCLANG_PATH=${HOME}/libclang/14.0.0
+	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
+	#export LLVM_INSTALL_DIR=${HOME}/libclang
+	#export LIBCLANG_PATH=${HOME}/libclang/14.0.0
 
 	# LLDB server
 	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
