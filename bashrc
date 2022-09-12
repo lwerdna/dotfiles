@@ -98,6 +98,8 @@ function bn_select_build {
 	export BN_DISABLE_USER_PLUGINS=1
 	export BN_DISABLE_REPOSITORY_PLUGINS=1
 	export LIBCLANG_PATH=/Users/andrewl/libclang/14.0.0/lib
+	# DO NOT LET LIBCLANG_PATH=${HOME}/libclang/14.0.0 be in your path or the rust bindings don't build
+	# ...must be system clang
 	#comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
 }
 
@@ -172,6 +174,7 @@ if [[ $platform == 'Darwin' ]]; then
 	alias coqide='/Applications/CoqIDE_8.13.1.app/Contents/MacOS/coqide'
 	alias vscode='open -a Visual\ Studio\ Code'
 	alias arduino='open -a Arduino'
+	alias z3='/usr/local/Cellar/z3/4.8.12_1/bin/z3'
 	# for midnight commander
 	export VIEWER='open'
 
@@ -198,12 +201,13 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=${PATH}:${HOME}/Qt/6.0.2/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.3.0/clang_64/bin
-	export PATH=${PATH}:${HOME}/Qt/6.3.1/clang_64/bin
+	#export PATH=${PATH}:${HOME}/Qt/6.3.1/clang_64/bin
 
 	# LLVM
 	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 	#export LLVM_INSTALL_DIR=${HOME}/libclang
-	#export LIBCLANG_PATH=${HOME}/libclang/14.0.0
+	export LIBCLANG_PATH=${HOME}/libclang/14.0.0/lib
+	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 
 	# LLDB server
 	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
@@ -424,6 +428,14 @@ goc() {
 		echo -e "}" >> $fname
 	fi
 	gvim +6 $fname
+}
+
+images_2_horizontal() {
+	convert $1 $2 +append $3
+}
+
+images_2_vertical() {
+	convert $1 $2 -append $3
 }
 
 # quick editor stuff
