@@ -5,7 +5,7 @@ on run argv
 	tell application "iTerm2"
 	    set newWindow to (create window with default profile)
 	    tell current session of newWindow
-	        write text "cd " & item 1 of argv
+	        write text "cd \"" & item 1 of argv & "\""
 	    end tell
 	end tell
 end run
