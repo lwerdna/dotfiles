@@ -22,6 +22,10 @@ install_gdb_arm:
 install_gdb_aarch64:
 	ln -s -f `pwd`/gdbinit_aarch64 ~/.gdbinit
 
+install_gdb_gef:
+	ln -s -f `pwd`/gdbinit-gef.py ~/.gdbinit-gef.py
+	echo 'Now edit ~/.gdbinit with "source ~/.gdbinit-gef.py"'
+
 install_vim:
 	if [ ! -d "${HOME}/.vim" ]; then mkdir ${HOME}/.vim; fi
 	if [ ! -d "${HOME}/.vim/ftdetect" ]; then mkdir ${HOME}/.vim/ftdetect; fi
