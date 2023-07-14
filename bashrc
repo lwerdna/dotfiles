@@ -27,6 +27,10 @@ export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 # local private (non github) stuff
 source ~/fdumps/.bashrc_private
 
+# default colors, except directories are Cyan instead of dark blue
+# https://geoff.greer.fm/lscolors/
+export LSCOLORS=gxfxcxdxbxegedabagacad
+
 ###############################################################################
 # binaryninja
 ###############################################################################
@@ -41,7 +45,8 @@ function bn_common {
 	unset BN_DISABLE_REPOSITORY_PLUGINS
 
 	export PYTHONPATH=${PYTHONPATH}:${BN_INSTALL_DIR}/Contents/Resources/python
-	export PYTHONPATH=${PYTHONPATH}:${HOME}/Qt/6.3.1/clang_64/pyside/site-packages
+	export PYTHONPATH=${PYTHONPATH}:${HOME}/Qt/6.4.3/clang_64/pyside/site-packages
+	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/workbench/binja-jupyter
 
 	# for, eg: Makefiles to specify an include path into API
 	export BN_API_PATH=$BN_SOURCE/api
@@ -72,6 +77,12 @@ function bn_select_release {
 	export BN_LIBBINARYNINJAAPI=$BN_BUILT_DIR/api/out/libbinaryninjaapi.a
 }
 
+function bn_select_installed {
+	echo Binary Ninja: selecting system-installed
+	export BN_INSTALL_DIR="/Applications/Binary\ Ninja.app"
+	bn_common
+}
+
 function bn_select_installed_dev {
 	echo Binary Ninja: selecting system-installed DEV
 	export BN_INSTALL_DIR="/Applications/Binary Ninja DEV.app"
@@ -97,7 +108,8 @@ function bn_select_build {
 	export BN_DISABLE_USER_SETTINGS=1
 	export BN_DISABLE_USER_PLUGINS=1
 	export BN_DISABLE_REPOSITORY_PLUGINS=1
-	export LIBCLANG_PATH=/Users/andrewl/libclang/14.0.0/lib
+	#export LIBCLANG_PATH=$HOME/libclang/14.0.0/lib
+	export LIBCLANG_PATH=$HOME/libclang/16.0.0/lib
 	# DO NOT LET LIBCLANG_PATH=${HOME}/libclang/14.0.0 be in your path or the rust bindings don't build
 	# ...must be system clang
 	#comment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
@@ -113,7 +125,7 @@ function bn_unselect_build {
 	#uncomment.py $BN_SOURCE/api/rust/examples/basic_script/CMakeLists.txt '#'
 }
 
-# release is the built debug one
+# release is the built release one
 bn_select_release
 
 echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
@@ -164,10 +176,11 @@ if [[ $platform == 'Darwin' ]]; then
 	#alias ls='ls -G'
 
 	# apps
-	alias macdown='open -a MacDown'
 	alias firefox='open -a firefox'
 	alias typora='open -a typora'
+	alias chessx='open -a chessx'
 	alias diffmerge='open -a diffmerge'
+	alias filemerge='open -a filemerge'
 	alias geany='open -a geany'
 	alias drawbot='open -a drawbot'
 	alias vlc='open -a vlc'
@@ -202,11 +215,13 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.3.0/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.3.1/clang_64/bin
+	export PATH=${PATH}:${HOME}/Qt/6.4.3/clang_64/bin
 
 	# LLVM
 	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 	#export LLVM_INSTALL_DIR=${HOME}/libclang
-	export LIBCLANG_PATH=${HOME}/libclang/14.0.0/lib
+	#export LIBCLANG_PATH=${HOME}/libclang/14.0.0/lib
+	export LIBCLANG_PATH=${HOME}/libclang/16.0.0/lib
 	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 
 	# LLDB server
@@ -317,7 +332,7 @@ jotter() {
 }
 
 notes() {
-	local fpath=$HOME/fdumps/journals/notes.md
+	local fpath=$HOME/fdumps/wiki/Commonplace.md
 	jotter $fpath $@
 }
 
@@ -389,6 +404,22 @@ function cdlog()
 	pushd "$HOME/fdumps/heap/$YEAR/$MONTH/$DAY"
 }
 
+function blog()
+{
+	local LOCATION=$HOME/Desktop/nvalt-notes
+	local suffix=" blog.txt"
+	local temp=`date +"%y%m%d"`
+	local fpath="${LOCATION}/${temp}${suffix}"
+	touch "${fpath}"
+	open ${LOCATION}
+}
+
+function readings()
+{
+	local LOCATION=$HOME/fdumps/readings
+	open ${LOCATION}
+}
+
 gopy() {
 	local fname
 
@@ -438,6 +469,30 @@ images_2_vertical() {
 	convert $1 $2 -append $3
 }
 
+graph() {
+	local fname
+
+	if [ "$1" == "" ]; then
+		fname="/tmp/tmp.dot"
+	else
+		fname=$1
+	fi
+
+	dot -Tpng $fname -o /tmp/tmp.png && open /tmp/tmp.png
+}
+
+graphsvg() {
+	local fname
+
+	if [ "$1" == "" ]; then
+		fname="/tmp/tmp.dot"
+	else
+		fname=$1
+	fi
+
+	dot -Tsvg $fname -o /tmp/tmp.svg && open -a firefox /tmp/tmp.svg
+}
+
 # quick editor stuff
 alias todo='gvim $HOME/fdumps/workspace/todo'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
@@ -456,9 +511,6 @@ alias more='less'
 
 alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
-
-alias graph='dot -Tpng /tmp/tmp.dot -o /tmp/tmp.png && open /tmp/tmp.png'
-alias graphsvg='dot -Tsvg /tmp/tmp.dot -o /tmp/tmp.svg && firefox /tmp/tmp.svg'
 
 alias server='python -m http.server'
 
