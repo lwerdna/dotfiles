@@ -12,6 +12,7 @@ export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/usr/local/sbin
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/repos/lwerdna/workbench
+#export PATH=$PATH:$HOME/libclang/16.0.0/bin
 
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
@@ -50,9 +51,11 @@ function bn_common {
 
 	# for, eg: Makefiles to specify an include path into API
 	export BN_API_PATH=$BN_SOURCE/api
+	export BN_VIEW_ELF_PATH=$HOME/repos/vector35/view-elf
 
 	# for, eg: Makefiles that compile plugins specify an install target
-	export BN_PLUGINS="$HOME/Library/Application Support/Binary Ninja/plugins"
+	export BN_USER_DIR="$HOME/Library/Application Support/Binary Ninja"
+	export BN_PLUGINS="$N_USER_DIR/plugins"
 
 	# for, eg: Makefiles for plugins to link against the API lib
 	export BN_LIBBINARYNINJACORE=$BN_INSTALL_DIR/Contents/MacOS/libbinaryninjacore.dylib
@@ -176,6 +179,7 @@ if [[ $platform == 'Darwin' ]]; then
 	#alias ls='ls -G'
 
 	# apps
+	alias sublime='open -a "Sublime Text"'
 	alias firefox='open -a firefox'
 	alias typora='open -a typora'
 	alias chessx='open -a chessx'
@@ -192,7 +196,8 @@ if [[ $platform == 'Darwin' ]]; then
 	export VIEWER='open'
 
 	# java
-	export JAVA_HOME=${HOME}/Downloads/jdk-11.0.1.jdk/Contents/Home
+	#export JAVA_HOME=${HOME}/Downloads/jdk-11.0.1.jdk/Contents/Home
+	export JAVA_HOME=${HOME}/Downloads/jdk-20.0.1.jdk/Contents/Home
 	export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
 	#export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
 	alias antlr4='java -jar /usr/local/lib/antlr-4.9.2-complete.jar'
@@ -305,6 +310,7 @@ function powerpc_eabi {
 ###############################################################################
 source ${DOTFILES}/wiki.sh
 export PATH_KB=$HOME/fdumps/wiki
+export PATH_JOURNALS=$HOME/fdumps/journals
 
 # first parameter ($1) is filename
 # second parameter ($2) is command
@@ -341,34 +347,21 @@ website() {
 	gvim $fpath
 }
 
-yesterday() {
-	local date=`date -v-1d +"%Y-%m-%d"`
-	local fpath="$HOME/fdumps/journals/$date.md"
-	open -a macvim $fpath
-}
-
-today() {
-	local fpath=$HOME/fdumps/journals
-	local date=`date +"%Y-%m-%d"`
-	local source="$fpath/daily_template.md"
-	local destination="$fpath/$date.md"
-	if [ ! -f $destination ]; then
-		echo "creating $destination";
-		cp $source $destination;
-	fi
-	echo "opening $destination";
-	open -a macvim $destination;
-}
-
 function create_dir_verbose()
 {
 	if [ ! -d $1 ]; then
-		echo "creating $1";
+		echo "creating $1" >&2;
 		mkdir $1;
 	fi
 }
 
-function cdlog()
+# create and return the current datepath
+# if an argument is given, create that, like "2023-01-02" will create:
+#    $HOME/fdumps/heap/2025/03/01
+# else the current date is used, so if today is March 1st, 2025, it will create:
+#    $HOME/fdumps/heap/2025/03/01
+# in both cases, the path will be echo'd so it can be captured from caller
+function datepath()
 {
 	local date PARTS YEAR MONTH DAY
 
@@ -379,17 +372,10 @@ function cdlog()
 		date=`date +"%Y-%m-%d"`
 	fi
 
-	# sanitize input
-	if [[ ! "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
-		echo "malformed date: $1"
-		return -1
-	fi
-
 	# apparently $(...) gets the output of a command
 	PARTS=$(echo $date | tr "-" " ")
 
-	# (...) makes it into an array, splitting on internal field separator (IFS)
-	# which defaults to space
+	# (...) makes it into an array, splitting on internal field separator (IFS) which defaults to space
 	PARTS=($PARTS)
 
 	# write
@@ -401,16 +387,55 @@ function cdlog()
 	create_dir_verbose "$HOME/fdumps/heap/$YEAR/$MONTH"
 	create_dir_verbose "$HOME/fdumps/heap/$YEAR/$MONTH/$DAY"
 
-	pushd "$HOME/fdumps/heap/$YEAR/$MONTH/$DAY"
+	echo "$HOME/fdumps/heap/$YEAR/$MONTH/$DAY"
 }
 
+function cdlog()
+{
+	local LOCATION=$(datepath $1)
+	pushd "$LOCATION"
+}
+
+function openlog()
+{
+	local LOCATION=$(datepath $1)
+	open "$LOCATION"
+}
+
+# blog by putting an YYYY-MM-DD.md entry in the wiki
+function blog_wiki()
+{
+	local LOCATION=$HOME/fdumps/wiki
+	if [ "$1" == "new" ]; then
+		local suffix=" blog.md"
+		local temp=`date +"%Y-%m-%d"`
+		local fpath="${LOCATION}/${temp}${suffix}"
+
+		echo "creating ${fpath}"
+		cp "${LOCATION}/BlogTemplate.md" "${fpath}"
+	elif [ "$1" == "folder" ]; then
+		local suffix=" blog"
+		local temp=`date +"%Y-%m-%d"`
+		local fpath="${LOCATION}/${temp}${suffix}"
+
+		echo "creating ${fpath}"
+		mkdir "${fpath}"
+		echo "creating ${fpath}/README.md"
+		cp "${LOCATION}/BlogTemplate.md" "${fpath}/README.md"
+		echo "creating ${fpath}/assets"
+		mkdir "${fpath}/assets"
+	else
+		echo "opening blog location"
+	fi
+	
+	open ${LOCATION}
+}
+
+# blog by putting an entry in the heap date path
 function blog()
 {
-	local LOCATION=$HOME/Desktop/nvalt-notes
-	local suffix=" blog.txt"
-	local temp=`date +"%y%m%d"`
-	local fpath="${LOCATION}/${temp}${suffix}"
-	touch "${fpath}"
+	local LOCATION=$(datepath $1)
+	cp "$HOME/fdumps/heap/BlogTemplate.md" "${LOCATION}/blog.md"
 	open ${LOCATION}
 }
 
@@ -494,7 +519,7 @@ graphsvg() {
 }
 
 # quick editor stuff
-alias todo='gvim $HOME/fdumps/workspace/todo'
+#alias todo='gvim $HOME/fdumps/workspace/todo'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
@@ -513,6 +538,8 @@ alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
 
 alias server='python -m http.server'
+
+alias journal='gvim $PATH_JOURNALS/journal.md'
 
 source ~/.bash_profile
 . "$HOME/.cargo/env"

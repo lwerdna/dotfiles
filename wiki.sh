@@ -12,9 +12,10 @@ wiki() {
 	# empty? open home page
 	if [ "$cmd" == "" ]; then
 		TMP=`pwd`
-		cd $PATH_WIKI
-		typora Home.md
-		cd $TMP
+		#cd $PATH_WIKI
+		#typora Home.md
+		#cd $TMP
+		open $PATH_WIKI
 		return 0
 	# change to wiki directory
 	elif [ "$cmd" == "cd" ]; then
