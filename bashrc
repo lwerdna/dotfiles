@@ -5,15 +5,14 @@ shopt -s nocaseglob
 
 export PATH=
 export PATH=$PATH:/bin
-export PATH=$PATH:/usr/bin
-export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/sbin
+export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/sbin
-export PATH=$PATH:/usr/local/sbin
+export PATH=$PATH:/opt/homebrew/bin
 export PATH=$PATH:$HOME/bin
-export PATH=$PATH:$HOME/repos/lwerdna/workbench
 #export PATH=$PATH:$HOME/libclang/16.0.0/bin
 
+export PYTHONPATH=
 # misc
 export DOTFILES=${HOME}/repos/lwerdna/dotfiles
 export GHIDRAHOME=${HOME}/Downloads/ghidra_9.0.4
@@ -45,6 +44,7 @@ function bn_common {
 	unset BN_DISABLE_USER_PLUGINS
 	unset BN_DISABLE_REPOSITORY_PLUGINS
 
+	unset PYTHONPATH
 	export PYTHONPATH=${PYTHONPATH}:${BN_INSTALL_DIR}/Contents/Resources/python
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/Qt/6.4.3/clang_64/pyside/site-packages
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/workbench/binja-jupyter
@@ -55,7 +55,7 @@ function bn_common {
 
 	# for, eg: Makefiles that compile plugins specify an install target
 	export BN_USER_DIR="$HOME/Library/Application Support/Binary Ninja"
-	export BN_PLUGINS="$N_USER_DIR/plugins"
+	export BN_PLUGINS="$BN_USER_DIR/plugins"
 
 	# for, eg: Makefiles for plugins to link against the API lib
 	export BN_LIBBINARYNINJACORE=$BN_INSTALL_DIR/Contents/MacOS/libbinaryninjacore.dylib
@@ -80,21 +80,23 @@ function bn_select_release {
 	export BN_LIBBINARYNINJAAPI=$BN_BUILT_DIR/api/out/libbinaryninjaapi.a
 }
 
+function bn_select_relwithdebinfo {
+	echo Binary Ninja: selecting the source compiled [RELEASE WITH DEBUG SYMBOLS]
+	export BN_BUILT_DIR=$BN_SOURCE/build_relwithdebinfo
+	export BN_INSTALL_DIR=$BN_BUILT_DIR/out/binaryninja.app
+	bn_common
+	export BN_LIBBINARYNINJAAPI=$BN_BUILT_DIR/api/out/libbinaryninjaapi.a
+}
+
 function bn_select_installed {
 	echo Binary Ninja: selecting system-installed
-	export BN_INSTALL_DIR="/Applications/Binary\ Ninja.app"
+	export BN_INSTALL_DIR="/Applications/Binary Ninja.app"
 	bn_common
 }
 
 function bn_select_installed_dev {
 	echo Binary Ninja: selecting system-installed DEV
 	export BN_INSTALL_DIR="/Applications/Binary Ninja DEV.app"
-	bn_common
-}
-
-function bn_select_installed_23 {
-	echo Binary Ninja: selecting system-installed 2.3
-	export BN_INSTALL_DIR="/Applications/Binary Ninja 2.3 2660.app"
 	bn_common
 }
 
@@ -106,7 +108,6 @@ function bn_select_installed_stable {
 
 function bn_select_build {
 	echo Binary Ninja: selecting build environment
-	unset PYTHONPATH
 	bn_select_release
 	export BN_DISABLE_USER_SETTINGS=1
 	export BN_DISABLE_USER_PLUGINS=1
@@ -120,7 +121,6 @@ function bn_select_build {
 
 function bn_unselect_build {
 	echo Binary Ninja: unselecting build environment
-	export PYTHONPATH
 	bn_select_release
 	unset BN_DISABLE_USER_SETTINGS
 	unset BN_DISABLE_USER_PLUGINS
@@ -141,11 +141,11 @@ echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 # python
 ###############################################################################
 
-eval "$(pyenv init --path)"
-pyenv shell 3.10.0 2.7.16
-
+# PYENV
+#eval "$(pyenv init --path)"
+#pyenv shell 3.10.0 2.7.16
 # some packages install executable scripts, like pyelftools puts readelf.py here
-export PATH=$PATH:$HOME/.pyenv/versions/3.10.0/bin
+#export PATH=$PATH:$HOME/.pyenv/versions/3.10.0/bin
 
 function python_import_sidekick {
 	export PYTHONPATH=${PYTHONPATH}:$HOME/repos/vector35/TypeLibraryBinaries/bnml/packages
@@ -192,16 +192,18 @@ if [[ $platform == 'Darwin' ]]; then
 	alias vscode='open -a Visual\ Studio\ Code'
 	alias arduino='open -a Arduino'
 	alias z3='/usr/local/Cellar/z3/4.8.12_1/bin/z3'
+	alias wpi='open ${HOME}/wpilib/2024/vscode/Visual\ Studio\ Code.app'
 	# for midnight commander
 	export VIEWER='open'
 
 	# java
 	#export JAVA_HOME=${HOME}/Downloads/jdk-11.0.1.jdk/Contents/Home
-	export JAVA_HOME=${HOME}/Downloads/jdk-20.0.1.jdk/Contents/Home
-	export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
+	#export JAVA_HOME=${HOME}/Downloads/jdk-20.0.1.jdk/Contents/Home
+	#export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:${HOME}/Downloads/gwt-2.8.0/gwt-user.jar"
 	#export CLASSPATH=".:/usr/local/lib/antlr-4.5.1-complete.jar:$CLASSPATH"
-	alias antlr4='java -jar /usr/local/lib/antlr-4.9.2-complete.jar'
-	alias grun='java org.antlr.v4.gui.TestRig'
+	#alias antlr4='java -jar /usr/local/lib/antlr-4.9.2-complete.jar'
+	#alias grun='java org.antlr.v4.gui.TestRig'
+	export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
 	# android
 	export ANDROID_SDK=${HOME}/Library/Android/sdk
@@ -230,9 +232,12 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
 
 	# LLDB server
-	export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
+	#export PATH=$PATH:/Library/Developer/CommandLineTools/Library/PrivateFrameworks/LLDB.framework/Versions/A/Resources
 	# SML NJ
 	#export PATH=$PATH:/usr/local/smlnj/bin
+
+	# PYTHON locally installed stuff
+	export PATH=$PATH:$HOME/Library/Python/3.9/bin/
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
@@ -250,6 +255,36 @@ elif [[ $platform == 'Linux' ]]; then
 	export NDK_R10E=${HOME}/android-ndk-r10e
 	export NDK=$NDK_R10E
 fi
+
+###############################################################################
+# aliases
+###############################################################################
+#
+# quick editor stuff
+#alias todo='gvim $HOME/fdumps/workspace/todo'
+alias gvim='open -a macvim'
+alias write='touch /tmp/index.md; typora /tmp/index.md'
+alias ghidra='$GHIDRAHOME/ghidraRun'
+alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
+alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
+alias ghidradoc='open $GHIDRAHOME/docs/'
+
+# Enable syntax-highlighting in less.
+# brew install source-highlight
+# First, add these two lines to ~/.bashrc
+export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
+export LESS=" -R "
+alias less='less -m -n -g -i -J --underline-special --SILENT'
+alias more='less'
+
+alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
+alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
+
+alias server='python -m http.server'
+
+alias journal='gvim $PATH_JOURNALS/journal.md'
+
+#alias python='python3'
 
 # platform-generals that depended on the platform-specifics
 #export PATH=${PATH}:${ANDROID_SDK}/tools
@@ -314,7 +349,7 @@ export PATH_JOURNALS=$HOME/fdumps/journals
 
 # first parameter ($1) is filename
 # second parameter ($2) is command
-jotter() {
+function jotter() {
 	# $1 is positional parameter
 	# $@ is array-like construct of all positional parameters
 	# https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
@@ -337,12 +372,12 @@ jotter() {
 	fi
 }
 
-notes() {
+function notes() {
 	local fpath=$HOME/fdumps/wiki/Commonplace.md
 	jotter $fpath $@
 }
 
-website() {
+function website() {
 	local fpath=$HOME/fdumps/website/index.md
 	gvim $fpath
 }
@@ -445,7 +480,8 @@ function readings()
 	open ${LOCATION}
 }
 
-gopy() {
+function gopy()
+{
 	local fname
 
 	if [ "$1" == "" ]; then
@@ -461,10 +497,11 @@ gopy() {
 		cp $HOME/fdumps/workspace/gopy-template.py $fname
 		chmod +x $fname
 	fi
-	gvim + $fname
+	gvim $fname
 }
 
-goc() {
+function goc()
+{
 	local fname
 
 	if [ "$1" == "" ]; then
@@ -486,15 +523,18 @@ goc() {
 	gvim +6 $fname
 }
 
-images_2_horizontal() {
+function images_2_horizontal()
+{
 	convert $1 $2 +append $3
 }
 
-images_2_vertical() {
+function images_2_vertical()
+{
 	convert $1 $2 -append $3
 }
 
-graph() {
+function graph()
+{
 	local fname
 
 	if [ "$1" == "" ]; then
@@ -506,7 +546,8 @@ graph() {
 	dot -Tpng $fname -o /tmp/tmp.png && open /tmp/tmp.png
 }
 
-graphsvg() {
+function graphsvg()
+{
 	local fname
 
 	if [ "$1" == "" ]; then
@@ -518,28 +559,12 @@ graphsvg() {
 	dot -Tsvg $fname -o /tmp/tmp.svg && open -a firefox /tmp/tmp.svg
 }
 
-# quick editor stuff
-#alias todo='gvim $HOME/fdumps/workspace/todo'
-alias write='touch /tmp/index.md; typora /tmp/index.md'
-alias ghidra='$GHIDRAHOME/ghidraRun'
-alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
-alias ghidraapi='open $GHIDRAHOME/docs/api/index.html'
-alias ghidradoc='open $GHIDRAHOME/docs/'
+function draw()
+{
+	cp "$HOME/fdumps/DrawTemplate.excalidraw" ./drawing.excalidraw
+	open ./drawing.excalidraw
+}
 
-# Enable syntax-highlighting in less.
-# brew install source-highlight
-# First, add these two lines to ~/.bashrc
-export LESSOPEN="| /usr/local/bin/src-hilite-lesspipe.sh %s"
-export LESS=" -R "
-alias less='less -m -n -g -i -J --underline-special --SILENT'
-alias more='less'
 
-alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
-alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
 
-alias server='python -m http.server'
-
-alias journal='gvim $PATH_JOURNALS/journal.md'
-
-source ~/.bash_profile
 . "$HOME/.cargo/env"
