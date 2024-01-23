@@ -8,6 +8,7 @@ export PATH=$PATH:/bin
 export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/sbin
+export PATH=$PATH:/usr/local/bin
 export PATH=$PATH:/opt/homebrew/bin
 export PATH=$PATH:$HOME/bin
 #export PATH=$PATH:$HOME/libclang/16.0.0/bin
