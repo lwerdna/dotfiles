@@ -263,7 +263,8 @@ fi
 #
 # quick editor stuff
 #alias todo='gvim $HOME/fdumps/workspace/todo'
-alias gvim='open -a macvim'
+alias vim='/Applications/MacVim.app/Contents/bin/vim'
+alias gvim='/Applications/MacVim.app/Contents/bin/gvim'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
