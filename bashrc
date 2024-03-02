@@ -192,7 +192,6 @@ if [[ $platform == 'Darwin' ]]; then
 	alias coqide='/Applications/CoqIDE_8.13.1.app/Contents/MacOS/coqide'
 	alias vscode='open -a Visual\ Studio\ Code'
 	alias arduino='open -a Arduino'
-	alias z3='/usr/local/Cellar/z3/4.8.12_1/bin/z3'
 	alias wpi='open ${HOME}/wpilib/2024/vscode/Visual\ Studio\ Code.app'
 	# for midnight commander
 	export VIEWER='open'
