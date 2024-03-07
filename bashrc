@@ -193,6 +193,9 @@ if [[ $platform == 'Darwin' ]]; then
 	alias vscode='open -a Visual\ Studio\ Code'
 	alias arduino='open -a Arduino'
 	alias wpi='open ${HOME}/wpilib/2024/vscode/Visual\ Studio\ Code.app'
+	alias vim='/Applications/MacVim.app/Contents/bin/vim'
+	alias gvim='/Applications/MacVim.app/Contents/bin/gvim'
+
 	# for midnight commander
 	export VIEWER='open'
 
@@ -262,8 +265,6 @@ fi
 #
 # quick editor stuff
 #alias todo='gvim $HOME/fdumps/workspace/todo'
-alias vim='/Applications/MacVim.app/Contents/bin/vim'
-alias gvim='/Applications/MacVim.app/Contents/bin/gvim'
 alias write='touch /tmp/index.md; typora /tmp/index.md'
 alias ghidra='$GHIDRAHOME/ghidraRun'
 alias ghidrapi='open $GHIDRAHOME/docs/api/index.html'
