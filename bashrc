@@ -130,7 +130,7 @@ function bn_unselect_build {
 }
 
 # release is the built release one
-bn_select_release
+#bn_select_release
 
 echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 
@@ -161,7 +161,8 @@ function python_import_kaitai {
 ###############################################################################
 
 #export PATH=${PATH}:${HOME}/.cargo/bin
-source $HOME/.cargo/env
+#source $HOME/.cargo/env
+#. "$HOME/.cargo/env"
 
 ###############################################################################
 # per-platform settings
@@ -347,6 +348,7 @@ function powerpc_eabi {
 ###############################################################################
 source ${DOTFILES}/wiki.sh
 export PATH_KB=$HOME/fdumps/wiki
+export PATH_KB_PUBLIC=$HOME/repos/lwerdna/wiki
 export PATH_JOURNALS=$HOME/fdumps/journals
 
 # first parameter ($1) is filename
@@ -569,4 +571,3 @@ function draw()
 
 
 
-. "$HOME/.cargo/env"
