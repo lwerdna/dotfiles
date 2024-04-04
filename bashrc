@@ -132,7 +132,7 @@ function bn_unselect_build {
 # release is the built release one
 #bn_select_release
 
-echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
+#echo "Binary Ninja: bn_select_debug bn_select_release bn_select_installed_dev"
 
 # shellcode compiler
 #export SCC=${HOME}/repos/vector35/binaryninja/scc/scc
@@ -347,8 +347,6 @@ function powerpc_eabi {
 # notes, snippets, wiki
 ###############################################################################
 source ${DOTFILES}/wiki.sh
-export PATH_KB=$HOME/fdumps/wiki
-export PATH_KB_PUBLIC=$HOME/repos/lwerdna/wiki
 export PATH_JOURNALS=$HOME/fdumps/journals
 
 # first parameter ($1) is filename
@@ -569,5 +567,24 @@ function draw()
 	open ./drawing.excalidraw
 }
 
+# Knowledge Bases / Wikis
+function kb_home()
+{
+	unset PATH_KB
+	export PATH_KB=$HOME/fdumps/wiki
+	echo "setting KB/wiki path to ${PATH_KB}"
+}
 
+function kb_public()
+{
+	unset PATH_KB
+	export PATH_KB=$HOME/repos/lwerdna/wiki
+	echo "setting KB/wiki path to ${PATH_KB}"
+}
 
+function kb_pub()
+{
+	kb_public
+}
+
+kb_public

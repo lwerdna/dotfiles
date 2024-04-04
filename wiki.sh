@@ -1,8 +1,5 @@
 #!/bin/bash
 
-PATH_WIKI=${HOME}/fdumps/wiki
-PATH_WIKI_ASSETS=${PATH_WIKI}/assets
-
 wiki() {
 	local cmd
 	local fpath
@@ -12,31 +9,31 @@ wiki() {
 	# empty? open home page
 	if [ "$cmd" == "" ]; then
 		TMP=`pwd`
-		#cd $PATH_WIKI
+		#cd $PATH_KB
 		#typora Home.md
 		#cd $TMP
-		open $PATH_WIKI
+		open $PATH_KB
 		return 0
 	# change to wiki directory
 	elif [ "$cmd" == "cd" ]; then
-		cd $PATH_WIKI
+		cd $PATH_KB
 		return 0
 	# push wiki directory
 	elif [ "$cmd" == "pushd" ]; then
-		pushd $PATH_WIKI
+		pushd $PATH_KB
 		return 0
 	# attach file
 	elif [ "$cmd" == "attach" ]; then
-		cp $2 $PATH_WIKI_ASSETS
+		cp $2 $PATH_KB_ASSETS
 		return 0
 	# open assets folder
 	elif [ "$cmd" == "files" ]; then
-		open $PATH_WIKI_ASSETS
+		open $PATH_KB_ASSETS
 		return 0
 	fi
 
 	# non-existent filenames become new markdown files
-	fpath=$PATH_WIKI/$1
+	fpath=$PATH_KB/$1
 	if ! [[ -f "$fpath" ]]; then
 		if [[ ! $fpath = *.md ]]; then
 			fpath="$fpath.md"
@@ -84,7 +81,7 @@ wikilog() {
 
 	# assume argument is a wiki file
 	# add .md if not present
-	fpath=$PATH_WIKI/$1
+	fpath=$PATH_KB/$1
 	if [[ ! $fpath = *.md ]]; then
 		fpath="$fpath.md"
 	fi
@@ -135,7 +132,7 @@ _GetWikiFiles()
 	COMPREPLY=() # array of possible completions
 	cur=${COMP_WORDS[COMP_CWORD]} # get current word being completed
 
-	pushd $PATH_WIKI > /dev/null
+	pushd $PATH_KB > /dev/null
 	COMPREPLY=($(\ls -1 $cur* 2>/dev/null)) # \ls avoids alias, 2>/dev/null supresses "No such file.." msg
 	popd > /dev/null
 
