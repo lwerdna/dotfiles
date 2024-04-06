@@ -241,7 +241,12 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=$PATH:/usr/local/smlnj/bin
 
 	# PYTHON locally installed stuff
-	export PATH=$PATH:$HOME/Library/Python/3.9/bin/
+	#export PATH=$PATH:$HOME/Library/Python/3.9/bin/
+
+	# using python venv on MacOS now:
+	VENV_PATH=${HOME}/PythonVirtualEnvironment0
+	echo "setting python venv: $VENV_PATH"
+	source $VENV_PATH/bin/activate
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
