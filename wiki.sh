@@ -44,7 +44,11 @@ wiki() {
 	if [ -f "$fpath" ]; then
 		echo "opening $fpath"
 		if [[ $fpath = *.md ]]; then
-			typora $fpath
+			# </dev/null this stdin from /dev/null
+			# >&0 sets stdout to stdin
+			# 2>&1 sets stderr to stdout
+			# & backgrounds
+			nohup typora $fpath </dev/null >&0 2>&1 &
 		elif [[ $fpath = *.v ]]; then
 			coqide $fpath
 		elif [[ $fpath = *.svg ]]; then
