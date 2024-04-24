@@ -296,6 +296,25 @@ alias journal='gvim $PATH_JOURNALS/journal.md'
 #export PATH=${PATH}:${ANDROID_SDK}/build-tools/28.0.1
 
 ###############################################################################
+# general helpers
+###############################################################################
+
+
+function create_dir_verbose()
+{
+	if [ ! -d $1 ]; then
+		echo "creating $1" >&2;
+		mkdir $1;
+	fi
+}
+
+function mkcd()
+{
+	create_dir_verbose $1
+	cd $1
+}
+
+###############################################################################
 # cross compiler stuff
 ###############################################################################
 
@@ -382,14 +401,6 @@ function notes() {
 function website() {
 	local fpath=$HOME/fdumps/website/index.md
 	gvim $fpath
-}
-
-function create_dir_verbose()
-{
-	if [ ! -d $1 ]; then
-		echo "creating $1" >&2;
-		mkdir $1;
-	fi
 }
 
 # create and return the current datepath
@@ -537,28 +548,28 @@ function images_2_vertical()
 
 function graph()
 {
+	set -x
 	local fname
-
 	if [ "$1" == "" ]; then
 		fname="/tmp/tmp.dot"
 	else
 		fname=$1
 	fi
-
 	dot -Tpng $fname -o /tmp/tmp.png && open /tmp/tmp.png
+	set +x
 }
 
 function graphsvg()
 {
+	set -x
 	local fname
-
 	if [ "$1" == "" ]; then
 		fname="/tmp/tmp.dot"
 	else
 		fname=$1
 	fi
-
 	dot -Tsvg $fname -o /tmp/tmp.svg && open -a firefox /tmp/tmp.svg
+	set +x
 }
 
 function draw()
