@@ -376,15 +376,16 @@ source ${DOTFILES}/wiki.sh
 
 export PATH_JOURNALS=$HOME/fdumps/journals
 
+# append to given file, use detailed date (+time, +day of week)
 # first parameter ($1) is filename
 # second parameter ($2) is command
-function jotter() {
+function jotter_append() {
 	# $1 is positional parameter
 	# $@ is array-like construct of all positional parameters
 	# https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
 	local fpath=$1
 	local text=${@:2}
-	if [ "$text" == "gvim" ]; then
+	if [ "$text" == "gvim" ] || [ "$text" == "" ]; then
 		gvim $fpath
 	elif [ "$text" == "vim" ]; then
 		vim + $fpath
@@ -401,9 +402,39 @@ function jotter() {
 	fi
 }
 
+# prepend to given file, use short date
+function jotter_prepend() {
+	#set -x
+	local fpath=$1
+	local text=${@:2}
+	local tmpfile=/tmp/tmp.md
+	echo $fpath
+	echo $fpath
+	echo $fpath
+	if [ "$text" == "gvim" ] || [ "$text" == "" ]; then
+		gvim $fpath
+	elif [ "$text" == "vim" ]; then
+		vim $fpath
+	elif [ "$text" == "typora" ]; then
+		open -a typora $fpath
+	elif [ "$text" == "date" ]; then
+		{ echo "# "`date +"%Y-%m-%d"`; echo ""; cat $fpath; } > $tmpfile
+		cp $tmpfile $fpath
+	else
+		{ echo $text; cat $fpath; } > $tmpfile
+		cp $tmpfile $fpath
+	fi
+	#set +x
+}
+
 function notes() {
 	local fpath=$PATH_KB/Commonplace.md
-	jotter $fpath $@
+	jotter_append $fpath $@
+}
+
+function logger() {
+	local fpath=$HOME/repos/lwerdna/workbench/log.md
+	jotter_prepend $fpath $@
 }
 
 function website() {
