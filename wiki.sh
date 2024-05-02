@@ -3,6 +3,7 @@
 wiki() {
 	local cmd
 	local fpath
+	local platform=`uname`
 
 	# assume argument is a command
 	cmd=$1
@@ -44,11 +45,15 @@ wiki() {
 	if [ -f "$fpath" ]; then
 		echo "opening $fpath"
 		if [[ $fpath = *.md ]]; then
-			# </dev/null this stdin from /dev/null
-			# >&0 sets stdout to stdin
-			# 2>&1 sets stderr to stdout
-			# & backgrounds
-			nohup typora $fpath </dev/null >&0 2>&1 &
+			if [[ $platform == 'Darwin' ]]; then
+				typora $fpath
+			else
+				# </dev/null this stdin from /dev/null
+				# >&0 sets stdout to stdin
+				# 2>&1 sets stderr to stdout
+				# & backgrounds
+				nohup typora $fpath </dev/null >&0 2>&1 &
+			fi
 		elif [[ $fpath = *.v ]]; then
 			coqide $fpath
 		elif [[ $fpath = *.svg ]]; then
