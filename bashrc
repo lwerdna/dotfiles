@@ -351,7 +351,10 @@ function powerpc_eabi {
 ###############################################################################
 # notes, snippets, wiki
 ###############################################################################
+export PATH_KB=$HOME/fdumps/wiki
+
 source ${DOTFILES}/wiki.sh
+
 export PATH_JOURNALS=$HOME/fdumps/journals
 
 # first parameter ($1) is filename
@@ -380,7 +383,7 @@ function jotter() {
 }
 
 function notes() {
-	local fpath=$HOME/fdumps/wiki/Commonplace.md
+	local fpath=$PATH_KB/Commonplace.md
 	jotter $fpath $@
 }
 
@@ -447,7 +450,7 @@ function openlog()
 # blog by putting an YYYY-MM-DD.md entry in the wiki
 function blog_wiki()
 {
-	local LOCATION=$HOME/fdumps/wiki
+	local LOCATION=$PATH_KB
 	if [ "$1" == "new" ]; then
 		local suffix=" blog.md"
 		local temp=`date +"%Y-%m-%d"`
@@ -572,24 +575,3 @@ function draw()
 	open ./drawing.excalidraw
 }
 
-# Knowledge Bases / Wikis
-function kb_home()
-{
-	unset PATH_KB
-	export PATH_KB=$HOME/fdumps/wiki
-	echo "setting KB/wiki path to ${PATH_KB}"
-}
-
-function kb_public()
-{
-	unset PATH_KB
-	export PATH_KB=$HOME/repos/lwerdna/wiki
-	echo "setting KB/wiki path to ${PATH_KB}"
-}
-
-function kb_pub()
-{
-	kb_public
-}
-
-kb_public
