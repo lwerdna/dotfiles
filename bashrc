@@ -9,8 +9,8 @@ export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/usr/local/bin
-export PATH=$PATH:/opt/homebrew/bin
 export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/.local/bin
 #export PATH=$PATH:$HOME/libclang/16.0.0/bin
 
 export PYTHONPATH=
@@ -175,6 +175,8 @@ export EDITOR='vim'
 # platform-specifics
 if [[ $platform == 'Darwin' ]]; then
 	echo setting Darwin-specific stuff...
+
+	export PATH=$PATH:/opt/homebrew/bin
 
 	# command-line utils
 	alias ls='ls -G -t -r'
