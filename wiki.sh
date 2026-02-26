@@ -109,6 +109,35 @@ wikilog() {
 	typora $fpath
 }
 
+# blog by putting an YYYY-MM-DD.md entry in the wiki
+function wikiblog()
+{
+	local LOCATION=$PATH_KB
+	if [ "$1" == "" ]; then
+		local suffix=" blog.md"
+		local temp=`date +"%Y-%m-%d"`
+		local fpath="${LOCATION}/${temp}${suffix}"
+
+		echo "creating ${fpath}"
+		cp "${LOCATION}/BlogTemplate.md" "${fpath}"
+	elif [ "$1" == "folder" ]; then
+		local suffix=" blog"
+		local temp=`date +"%Y-%m-%d"`
+		local fpath="${LOCATION}/${temp}${suffix}"
+
+		echo "creating ${fpath}"
+		mkdir "${fpath}"
+		echo "creating ${fpath}/README.md"
+		cp "${LOCATION}/BlogTemplate.md" "${fpath}/README.md"
+		echo "creating ${fpath}/assets"
+		mkdir "${fpath}/assets"
+	else
+		echo "opening blog location"
+	fi
+
+	open ${LOCATION}
+}
+
 # notes:
 # https://www.gnu.org/software/bash/manual/html_node/Programmable-Completion.html#Programmable-Completion
 # https://spin.atomicobject.com/2016/02/14/bash-programmable-completion/

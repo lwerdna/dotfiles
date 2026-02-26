@@ -9,8 +9,7 @@ export PATH=$PATH:/sbin
 export PATH=$PATH:/usr/bin
 export PATH=$PATH:/usr/sbin
 export PATH=$PATH:/usr/local/bin
-export PATH=$PATH:/opt/homebrew/bin
-export PATH=$PATH:$HOME/bin
+export PATH=$PATH:$HOME/.local/bin
 #export PATH=$PATH:$HOME/libclang/16.0.0/bin
 
 export PYTHONPATH=
@@ -177,8 +176,8 @@ if [[ $platform == 'Darwin' ]]; then
 	echo setting Darwin-specific stuff...
 
 	# command-line utils
-	alias ls='ls -G -t -r'
-	#alias ls='ls -G'
+	#alias ls='ls -G -t -r'
+	alias ls='ls -G'
 
 	# apps
 	alias sublime='open -a "Sublime Text"'
@@ -226,7 +225,7 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=${PATH}:${HOME}/Qt/6.1.1/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.3.0/clang_64/bin
 	#export PATH=${PATH}:${HOME}/Qt/6.3.1/clang_64/bin
-	export PATH=${PATH}:${HOME}/Qt/6.4.3/clang_64/bin
+	#export PATH=${PATH}:${HOME}/Qt/6.4.3/clang_64/bin
 
 	# LLVM
 	#export PATH=$PATH:${HOME}/libclang/14.0.0/bin
@@ -244,9 +243,15 @@ if [[ $platform == 'Darwin' ]]; then
 	#export PATH=$PATH:$HOME/Library/Python/3.9/bin/
 
 	# using python venv on MacOS now:
-	VENV_PATH=${HOME}/PythonVirtualEnvironment0
-	echo "setting python venv: $VENV_PATH"
-	source $VENV_PATH/bin/activate
+	# WARNING! CHANGES PATH!
+	#VENV_PATH=${HOME}/PythonVirtualEnvironment0
+	#echo "setting python venv: $VENV_PATH"
+	#source $VENV_PATH/bin/activate
+
+	source ${HOME}/PythonVirtualEnvironment0/bin/activate
+
+	export PATH=$PATH:/opt/homebrew/bin
+	export PATH=$PATH:/usr/local/zfs/bin
 
 elif [[ $platform == 'FreeBSD' ]]; then
 	echo setting FreeBSD-specific stuff...
@@ -289,8 +294,6 @@ alias nes='gvim $HOME/repos/vector35/binaryninja/api/python/examples/nes.py'
 alias arm64='pushd $HOME/repos/vector35/binaryninja/public/arch/arm64'
 
 alias server='python -m http.server'
-
-alias journal='gvim $PATH_JOURNALS/journal.md'
 
 #alias python='python3'
 
@@ -374,8 +377,6 @@ export PATH_KB=$HOME/fdumps/wiki
 
 source ${DOTFILES}/wiki.sh
 
-export PATH_JOURNALS=$HOME/fdumps/journals
-
 # append to given file, use detailed date (+time, +day of week)
 # first parameter ($1) is filename
 # second parameter ($2) is command
@@ -425,11 +426,6 @@ function jotter_prepend() {
 		cp $tmpfile $fpath
 	fi
 	#set +x
-}
-
-function notes() {
-	local fpath=$PATH_KB/Commonplace.md
-	jotter_append $fpath $@
 }
 
 function logger() {
@@ -487,35 +483,6 @@ function openlog()
 {
 	local LOCATION=$(datepath $1)
 	open "$LOCATION"
-}
-
-# blog by putting an YYYY-MM-DD.md entry in the wiki
-function blog_wiki()
-{
-	local LOCATION=$PATH_KB
-	if [ "$1" == "new" ]; then
-		local suffix=" blog.md"
-		local temp=`date +"%Y-%m-%d"`
-		local fpath="${LOCATION}/${temp}${suffix}"
-
-		echo "creating ${fpath}"
-		cp "${LOCATION}/BlogTemplate.md" "${fpath}"
-	elif [ "$1" == "folder" ]; then
-		local suffix=" blog"
-		local temp=`date +"%Y-%m-%d"`
-		local fpath="${LOCATION}/${temp}${suffix}"
-
-		echo "creating ${fpath}"
-		mkdir "${fpath}"
-		echo "creating ${fpath}/README.md"
-		cp "${LOCATION}/BlogTemplate.md" "${fpath}/README.md"
-		echo "creating ${fpath}/assets"
-		mkdir "${fpath}/assets"
-	else
-		echo "opening blog location"
-	fi
-	
-	open ${LOCATION}
 }
 
 # blog by putting an entry in the heap date path
@@ -617,3 +584,4 @@ function draw()
 	open ./drawing.excalidraw
 }
 
+alias snap="ffmpeg -ss 0.5 -f avfoundation -r 30.000030 -i "0" -t 1 capture.jpg"
