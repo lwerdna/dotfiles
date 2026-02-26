@@ -155,6 +155,10 @@ function python_import_kaitai {
 	export PYTHONPATH=${PYTHONPATH}:${HOME}/repos/lwerdna/kaitai_struct_formats/build
 }
 
+if [ -d "$HOME/MyPyEnv" ]; then
+	source "$HOME/MyPyEnv/bin/activate"
+fi
+
 ###############################################################################
 # rust
 ###############################################################################
