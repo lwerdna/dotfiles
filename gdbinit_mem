@@ -134,3 +134,22 @@ document dq
 Print dump quad words (8-byte types) at specified address
 end
 
+# dump to file (but unlike gdb's built-in command, this fails gracefully upon bad mem read)
+define dump_best_effort
+	set $fpath = $arg0
+	set $_addr = $arg1
+	set $_limit = $arg2
+	set $started = 0
+	printf "addr:0x%X limit:0x%X\n", $_addr, $_limit
+	while($_addr < $_limit)
+		if($started == 0)
+			printf "dump binary memory %s 0x%X, 0x%X\n", $fpath, $_addr, $_addr+0x1000
+			eval "dump binary memory %s 0x%X 0x%X", $fpath, $_addr, $_addr + 0x1000
+			set $started = 1
+		else
+			printf "append binary memory %s 0x%X 0x%X\n", $fpath, $_addr, $_addr+0x1000
+			eval "append binary memory %s 0x%X 0x%X", $fpath, $_addr, $_addr + 0x1000
+		end
+		set $_addr = $_addr + 0x1000
+	end
+end

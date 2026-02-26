@@ -175,6 +175,8 @@ export EDITOR='vim'
 if [[ $platform == 'Darwin' ]]; then
 	echo setting Darwin-specific stuff...
 
+	export PATH=$PATH:/opt/homebrew/bin
+
 	# command-line utils
 	#alias ls='ls -G -t -r'
 	alias ls='ls -G'
@@ -371,6 +373,28 @@ function powerpc_eabi {
 }
 
 ###############################################################################
+# GDB control
+###############################################################################
+
+function gdb_set_arm {
+	ln -s -f ~/repos/lwerdna/dotfiles/gdbinit_mem ~/.gdbinit_mem
+	ln -s -f ~/repos/lwerdna/dotfiles/gdbinit_arm ~/.gdbinit
+	ls -l ~/.gdbinit*
+}
+
+function gdb_set_x64 {
+	ln -s -f ~/repos/lwerdna/dotfiles/gdbinit_mem ~/.gdbinit_mem
+	ln -s -f ~/repos/lwerdna/dotfiles/gdbinit_x64 ~/.gdbinit
+	ls -l ~/.gdbinit*
+}
+
+function gdb_set_aarch64 {
+	ln -s -f ~/repos/lwerdna/dotfiles/gdbinit_mem ~/.gdbinit_mem
+	ln -s -f ~/repos/lwerdna/dotfiles/gdbinit_aarch64 ~/.gdbinit
+	ls -l ~/.gdbinit*
+}
+
+###############################################################################
 # notes, snippets, wiki
 ###############################################################################
 export PATH_KB=$HOME/fdumps/wiki
@@ -409,9 +433,6 @@ function jotter_prepend() {
 	local fpath=$1
 	local text=${@:2}
 	local tmpfile=/tmp/tmp.md
-	echo $fpath
-	echo $fpath
-	echo $fpath
 	if [ "$text" == "gvim" ] || [ "$text" == "" ]; then
 		gvim $fpath
 	elif [ "$text" == "vim" ]; then
