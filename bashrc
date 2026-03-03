@@ -25,7 +25,7 @@ export PATH_AUTILS_PY=${PATH_AUTILS}/py
 export PATH_AUTILS_PY3=${PATH_AUTILS}/py3
 
 # local private (non github) stuff
-source ~/fdumps/.bashrc_private
+source ~/fdumps/vault/bashrc_private
 
 # default colors, except directories are Cyan instead of dark blue
 # https://geoff.greer.fm/lscolors/
