@@ -405,10 +405,15 @@ export PATH_KB=$HOME/fdumps/wiki
 
 source ${DOTFILES}/wiki.sh
 
+function prepend_date() {
+	local FPATH=$1
+	sed -i "1i# $(date +"%Y-%m-%d %A")\\n" $FPATH
+}
+
 # append to given file, use detailed date (+time, +day of week)
 # first parameter ($1) is filename
 # second parameter ($2) is command
-function jotter_append() {
+function jotter() {
 	# $1 is positional parameter
 	# $@ is array-like construct of all positional parameters
 	# https://www.gnu.org/software/bash/manual/html_node/Shell-Variables.html
@@ -610,3 +615,16 @@ function draw()
 }
 
 alias snap="ffmpeg -ss 0.5 -f avfoundation -r 30.000030 -i "0" -t 1 capture.jpg"
+
+function remember()
+{
+	DPATH_NOTES=$HOME/repos/lwerdna/notes
+	PATH_ENTRIES=$DPATH_NOTES/entries.md
+	PATH_COMMONPLACE=$DPATH_NOTES/commonplace.txt
+
+	prepend_date $PATH_ENTRIES
+	prepend_date $PATH_COMMONPLACE
+
+	cd $DPATH_NOTES
+	gvim -p $PATH_ENTRIES $PATH_COMMONPLACE
+}
